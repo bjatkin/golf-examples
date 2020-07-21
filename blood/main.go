@@ -3,7 +3,6 @@ package main
 import (
 	"fantasyConsole/golf"
 	"fmt"
-	"math/rand"
 )
 
 var g *golf.Engine
@@ -23,66 +22,66 @@ var debug string
 
 func initGame() {
 	player = addEntity(entity{
-		flags:  playerControlled,
-		sig:    pos | spr | hp | colidable,
-		hp:     100,
-		pos:    posComp{10, 10},
-		spr:    sprComp{ani: [10]int{2, 3}, aniLen: 2, aniSpeed: 60, opt: golf.SprOpts{Height: 2, Transparent: golf.Col7}},
-		colide: colidableComp{width: 8, height: 16, oldX: 10, oldY: 10},
+		flags:   playerControlled,
+		sig:     pos | spr | hp | collide,
+		hp:      100,
+		pos:     posComp{10, 10},
+		spr:     sprComp{ani: [10]int{2, 3}, aniLen: 2, aniSpeed: 60, opt: golf.SOp{H: 2, TCol: golf.Col7}},
+		collide: collidableComp{width: 8, height: 16, oldX: 10, oldY: 10},
 	})
 
 	//Wall
 	addEntity(entity{
-		sig:    pos | spr | colidable,
-		pos:    posComp{50, 150},
-		spr:    sprComp{ani: [10]int{68}, aniLen: 1, opt: golf.SprOpts{Height: 2, Width: 4}},
-		colide: colidableComp{width: 32, height: 16, oldX: 50, oldY: 150},
+		sig:     pos | spr | collide,
+		pos:     posComp{50, 150},
+		spr:     sprComp{ani: [10]int{68}, aniLen: 1, opt: golf.SOp{H: 2, W: 4}},
+		collide: collidableComp{width: 32, height: 16, oldX: 50, oldY: 150},
 	})
 
 	// for i := 0; i < 15; i++ {
-	addEnemy(rand.Intn(192), rand.Intn(192))
-	addEnemy(rand.Intn(192), rand.Intn(192))
+	// addEnemy(rand.Intn(192), rand.Intn(192))
+	// addEnemy(rand.Intn(192), rand.Intn(192))
 	// }
 
 	allUpdateSystems[movePlayer] = toSystem(playerControlled, pos, func(e *entity) {
 		e.spr.ani = [10]int{2, 3}
 		e.spr.aniLen = 2
 		e.spr.aniSpeed = 60
-		e.spr.opt.Width = 1
-		e.colide.width = 8
+		e.spr.opt.W = 1
+		e.collide.width = 8
 		if g.Btn(golf.WKey) {
 			e.pos.y--
 			e.spr.ani = [10]int{14, 16, 18, 20, -14, -16, -18, -20}
 			e.spr.aniLen = 8
 			e.spr.aniSpeed = 10
-			e.spr.opt.Width = 2
-			e.colide.width = 16
+			e.spr.opt.W = 2
+			e.collide.width = 16
 		}
 		if g.Btn(golf.SKey) {
 			e.pos.y++
 			e.spr.ani = [10]int{14, 16, 18, 20, -14, -16, -18, -20}
 			e.spr.aniLen = 8
 			e.spr.aniSpeed = 10
-			e.spr.opt.Width = 2
-			e.colide.width = 16
+			e.spr.opt.W = 2
+			e.collide.width = 16
 		}
 		if g.Btn(golf.AKey) {
 			e.pos.x--
 			e.spr.ani = [10]int{6, 8, 10, 12}
 			e.spr.aniLen = 4
 			e.spr.aniSpeed = 10
-			e.spr.opt.FlipH = false
-			e.spr.opt.Width = 2
-			e.colide.width = 16
+			e.spr.opt.FH = false
+			e.spr.opt.W = 2
+			e.collide.width = 16
 		}
 		if g.Btn(golf.DKey) {
 			e.pos.x++
 			e.spr.ani = [10]int{6, 8, 10, 12}
 			e.spr.aniLen = 4
 			e.spr.aniSpeed = 10
-			e.spr.opt.FlipH = true
-			e.spr.opt.Width = 2
-			e.colide.width = 16
+			e.spr.opt.FH = true
+			e.spr.opt.W = 2
+			e.collide.width = 16
 		}
 	})
 
@@ -92,31 +91,21 @@ func initGame() {
 		if dist > e.ai.atkRange*e.ai.atkRange {
 			return
 		}
-		e.spr.ani = [10]int{24, 25}
-		e.spr.aniLen = 2
-		if g.Frames()%5 != 0 { //Dont want to move too fast!
-			return
-		}
-
 		e.spr.ani = [10]int{24, 25, 26}
 		e.spr.aniLen = 3
 		if e.pos.x < t.pos.x {
 			e.pos.x++
-			e.spr.opt.FlipH = true
-			debug += "ai moving right\n"
+			e.spr.opt.FH = true
 		}
 		if e.pos.x > t.pos.x {
 			e.pos.x--
-			e.spr.opt.FlipH = false
-			debug += "ai moving left\n"
+			e.spr.opt.FH = false
 		}
 		if e.pos.y < t.pos.y {
 			e.pos.y++
-			debug += "ai moving up\n"
 		}
 		if e.pos.y > t.pos.y {
 			e.pos.y--
-			debug += "ai moving down\n"
 		}
 	})
 
@@ -135,24 +124,20 @@ func initGame() {
 		}
 	})
 
-	allUpdateSystems[physicsRound0] = toSystem(0, pos|colidable, runPhysicsStep)
-	allUpdateSystems[physicsRound1] = toSystem(0, pos|colidable, runPhysicsStep)
-	allUpdateSystems[physicsRound2] = toSystem(0, pos|colidable, runPhysicsStep)
-	allUpdateSystems[physicsRound3] = toSystem(0, pos|colidable, runPhysicsStep)
-	allUpdateSystems[physicsRound4] = toSystem(0, pos|colidable, runPhysicsStep)
-	allUpdateSystems[physicsRound5] = toSystem(0, pos|colidable, runPhysicsStep)
-	allUpdateSystems[physicsRound6] = toSystem(0, pos|colidable, runPhysicsStep)
-	allUpdateSystems[physicsRound7] = toSystem(0, pos|colidable, runPhysicsStep)
-	allUpdateSystems[physicsRound8] = toSystem(0, pos|colidable, runPhysicsStep)
-	allUpdateSystems[physicsRound9] = toSystem(0, pos|colidable, runPhysicsStep)
+	allUpdateSystems[startCollision] = toSystem(0, pos|collide, func(e *entity) {
+		// Add all these entities to a list to make collision detection faster
+		allCollidables[collidablePointer] = e
+		collidablePointer++
+	})
 
-	allUpdateSystems[resolvePhysics] = toSystem(0, colidable|pos, func(e *entity) {
-		e.pos.x = e.colide.oldX + int(e.colide.deltaX)
-		e.pos.y = e.colide.oldY + int(e.colide.deltaY)
-		e.colide.deltaX = 0
-		e.colide.deltaY = 0
-		e.colide.oldX = e.pos.x
-		e.colide.oldY = e.pos.y
+	allUpdateSystems[doCollision] = toSystem(0, pos|collide, doPhysics)
+
+	allUpdateSystems[resolveCollision] = toSystem(0, pos|collide, func(e *entity) {
+		e.pos.x = e.collide.oldX + e.collide.deltaX
+		e.pos.y = e.collide.oldY + e.collide.deltaY
+		e.collide.oldX = e.pos.x
+		e.collide.oldY = e.pos.y
+		collidablePointer = 0
 	})
 
 	allDrawSystems[drawSprite] = toSystem(0, pos|spr, func(e *entity) {
@@ -169,21 +154,21 @@ func initGame() {
 		frame := e.spr.ani[e.spr.aniFrame]
 		opt := e.spr.opt
 		if frame < 0 {
-			opt.FlipH = true
+			opt.FH = true
 			frame *= -1
 		}
 		g.Spr(frame, e.pos.x, e.pos.y, opt)
-		if e.hasComponent(colidable) {
-			g.Rect(e.pos.x, e.pos.y, e.colide.width, e.colide.height, golf.Col1)
+		if e.hasComponent(collide) {
+			g.Rect(e.pos.x, e.pos.y, e.collide.width, e.collide.height, golf.Col1)
 		}
 	})
 
 	allDrawSystems[drawHP] = toSystem(playerControlled, hp, func(e *entity) {
 		if e.hp < 0 {
-			g.TextL("You DED!", golf.TextOpts{Col: golf.Col3})
+			g.TextL("You DED!", golf.TOp{Col: golf.Col3})
 			return
 		}
-		g.TextL(fmt.Sprintf("HP: %d", e.hp), golf.TextOpts{Col: golf.Col3})
+		g.TextL(fmt.Sprintf("HP: %d", e.hp), golf.TOp{Col: golf.Col3})
 	})
 }
 
@@ -194,19 +179,46 @@ func update() {
 func draw() {
 	g.Cls()
 	runDrawSystems()
-	g.TextR(debug, golf.TextOpts{Col: golf.Col3})
+	a, b := allCollidables[0], allCollidables[1]
+	x1, y1 := a.collide.oldX+a.collide.deltaX, a.collide.oldY+a.collide.deltaY
+	w1, h1 := a.collide.width, a.collide.height
+	x2, y2 := b.collide.oldX+b.collide.deltaX, b.collide.oldY+b.collide.deltaY
+	w2, h2 := b.collide.width, b.collide.height
+	debug += fmt.Sprintf("\nx1 %d, y1 %d, w1 %d, h1 %d\nx2 %d, y2 %d, w1 %d, h1 %d", int(x1), int(y1), int(w1), int(h1), int(x2), int(y2), int(w2), int(h2))
+	var xO1, yO1, xO2, yO2, xO3, yO3 bool
+	if x1 >= x2 && x1 <= x2+h2 {
+		xO1 = true
+	}
+	if x1+h1 >= x2 && x1+h1 <= x2+h2 {
+		xO2 = true
+	}
+	if x1 >= x2 && x1+h1 <= x2+h2 {
+		xO3 = true
+	}
+	if y1 >= y2 && y1 <= y2+h2 {
+		yO1 = true
+	}
+	if y1+h1 >= y2 && y1+h1 <= y2+h2 {
+		yO2 = true
+	}
+	if y1 >= y2 && y1+h1 <= y2+h2 {
+		yO3 = true
+	}
+	debug += fmt.Sprintf("\nxO1: %v, yO1: %v,\nxO2: %v, yO2: %v\nxO3: %v, yO3: %v", xO1, yO1, xO2, yO2, xO3, yO3)
+
+	g.TextR(debug, golf.TOp{Col: golf.Col3})
 	debug = ""
 }
 
-func addEnemy(x, y int) int {
+func addEnemy(x, y float64) int {
 	// zombie
 	id := addEntity(entity{
-		flags:  enemy,
-		sig:    pos | spr | ai | colidable,
-		pos:    posComp{x, y},
-		spr:    sprComp{ani: [10]int{24, 25, 26}, aniLen: 3, aniSpeed: 30, opt: golf.SprOpts{Height: 2, Transparent: golf.Col7}},
-		ai:     aiComp{atkRange: 150, target: player},
-		colide: colidableComp{width: 8, height: 16, oldX: x, oldY: y},
+		flags:   enemy,
+		sig:     pos | spr | ai | collide,
+		pos:     posComp{x, y},
+		spr:     sprComp{ani: [10]int{24, 25, 26}, aniLen: 3, aniSpeed: 30, opt: golf.SOp{H: 2, TCol: golf.Col7}},
+		ai:      aiComp{atkRange: 150, target: player},
+		collide: collidableComp{width: 8, height: 16, oldX: x, oldY: y},
 	})
 	return id
 }

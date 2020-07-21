@@ -8,15 +8,15 @@ var allEntities = [100]entity{} // is 100 to many? not enough?
 var entityPointer = 0
 
 type entity struct {
-	id     int
-	flags  flag
-	sig    component
-	spr    sprComp
-	pos    posComp
-	text   string
-	ai     aiComp
-	hp     int
-	colide colidableComp
+	id      int
+	flags   flag
+	sig     component
+	spr     sprComp
+	pos     posComp
+	text    string
+	ai      aiComp
+	hp      int
+	collide collidableComp
 }
 
 func (e *entity) hasFlag(f flag) bool {
@@ -37,36 +37,36 @@ func addEntity(e entity) int {
 type component int
 
 const (
-	pos       = component(1)
-	spr       = component(2)
-	text      = component(4)
-	ai        = component(8)
-	hp        = component(16)
-	colidable = component(32)
+	pos     = component(1)
+	spr     = component(2)
+	text    = component(4)
+	ai      = component(8)
+	hp      = component(16)
+	collide = component(32)
 )
 
 type posComp struct {
-	x, y int
+	x, y float64
 }
 
 type sprComp struct {
 	ani      [10]int
 	aniLen   int
 	aniSpeed int
-	opt      golf.SprOpts
+	opt      golf.SOp
 	aniFrame int
 	frame    int
 }
 
 type aiComp struct {
-	atkRange int
+	atkRange float64
 	target   int
 }
 
-type colidableComp struct {
-	oldX, oldY     int
-	width, height  int
+type collidableComp struct {
+	oldX, oldY     float64
 	deltaX, deltaY float64
+	width, height  float64
 }
 
 type flag int

@@ -1,77 +1,43 @@
 package main
 
-var physicsSteps = 9.0
+import (
+	"strconv"
+)
 
-func runPhysicsStep(e *entity) {
-	dirX := float64(e.pos.x-e.colide.oldX) / physicsSteps
-	dirY := float64(e.pos.y-e.colide.oldY) / physicsSteps
-	Colide, xColide, yColide := false, false, false
-	for i := 0; i < entityPointer; i++ {
-		if i == e.id {
+var allCollidables = [len(allEntities)]*entity{}
+var collidablePointer = 0
+
+func doPhysics(e *entity) {
+	e.collide.deltaX = e.pos.x - e.collide.oldX
+	e.collide.deltaY = e.pos.y - e.collide.oldY
+	for i := 0; i < collidablePointer; i++ {
+		check := allCollidables[i]
+		if check == e {
 			continue
 		}
-		o := allEntities[i]
-		if !o.hasComponent(colidable) {
-			continue
+		x1, y1 := check.collide.oldX+check.collide.deltaX, check.collide.oldY+check.collide.deltaY
+		w1, h1 := check.collide.width, check.collide.height
+		x2, y2 := e.collide.oldX+e.collide.deltaX, e.collide.oldY+e.collide.deltaY
+		w2, h2 := e.collide.width, e.collide.height
+		if didCollide(x1, y1, w1, h1, x2, y2, w2, h2) {
+			debug = "collide " + strconv.Itoa(i) + "/" + strconv.Itoa(collidablePointer-1)
 		}
-		x1 := float64(e.colide.oldX) + e.colide.deltaX + dirX
-		y1 := float64(e.colide.oldY) + e.colide.deltaY + dirY
-		w1, h1 := float64(e.colide.width), float64(e.colide.height)
-		x2 := float64(o.colide.oldX) + o.colide.deltaX
-		y2 := float64(o.colide.oldY) + o.colide.deltaY
-		w2, h2 := float64(o.colide.width), float64(o.colide.height)
-		if !Colide && didCollide(x1, y1, w1, h1, x2, y2, w2, h2) {
-			Colide = true
-		}
-		if !xColide && didCollide(x1, y1-dirY, w1, h1, x2, y2, w2, h2) {
-			xColide = true
-		}
-		if !yColide && didCollide(x1-dirX, y1, w1, h1, x2, y2, w2, h2) {
-			yColide = true
-		}
-	}
-	if !xColide {
-		e.colide.deltaX += dirX
-	}
-	if !yColide {
-		e.colide.deltaY += dirY
 	}
 }
 
 func didCollide(x1, y1, w1, h1, x2, y2, w2, h2 float64) bool {
-	xOver, yOver := false, false
-	if x1 > x2 && x1 < x2+w2 {
+	var xOver, yOver bool
+	if x1 >= x2 && x1 <= x2+h2 {
 		xOver = true
 	}
-	if y1 > y2 && y1 < y2+h2 {
-		yOver = true
-	}
-	if x1+w1 > x2 && x1+w1 < x2+w2 {
+	if x1+h1 >= x2 && x1+h1 <= x2+h2 {
 		xOver = true
 	}
-	if y1+h1 > y2 && y1+h1 < y2+h2 {
+	if y1 >= y2 && y1 <= y2+h2 {
 		yOver = true
 	}
-	if x1 > x2 && x1+w1 < x2+w2 {
-		xOver = true
-	}
-	if y1 > y2 && y1+h1 < y2+h2 {
+	if y1+h1 >= y2 && y1+h1 <= y2+h2 {
 		yOver = true
-	}
-	if x2 > x1 && x2+w2 < x1+w1 {
-		xOver = true
-	}
-	if y2 > y1 && y2+h2 < y1+h1 {
-		yOver = true
-	}
-	//We need these checks because the floats
-	//are converted from integers and so might
-	//actually be exactly equal
-	if y1 == y2 || y1 == y2+h2 {
-		yOver = true
-	}
-	if x1 == x2 || x1 == x2+w2 {
-		xOver = true
 	}
 	return xOver && yOver
 }

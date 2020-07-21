@@ -5,17 +5,9 @@ const (
 	movePlayer = iota
 	doAI
 	doAttack
-	physicsRound0
-	physicsRound1
-	physicsRound2
-	physicsRound3
-	physicsRound4
-	physicsRound5
-	physicsRound6
-	physicsRound7
-	physicsRound8
-	physicsRound9
-	resolvePhysics
+	startCollision
+	doCollision
+	resolveCollision
 	updateSystemLen
 )
 
