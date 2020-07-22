@@ -10,13 +10,6 @@ import (
 var g *golf.Engine
 
 func main() {
-	// g = golf.NewEngine(bibiDuckUpdate, bibiDuckDraw)
-	// g.BG(golf.Col5)
-	// g.PalA(5)
-	// g.PalB(6)
-	// g.LoadSprs(spriteSheet)
-	// g.Run()
-
 	lastFrameTime = time.Now().UnixNano()
 	g = golf.NewEngine(update, draw)
 

@@ -10,7 +10,7 @@ var g *golf.Engine
 func main() {
 	g = golf.NewEngine(update, draw)
 
-	g.BG(golf.Col0)
+	g.SetBG(golf.Col0)
 	g.LoadSprs(spriteSheet)
 	g.LoadMap(mapData)
 	initGame()
