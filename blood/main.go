@@ -14,8 +14,8 @@ func main() {
 	g.LoadSprs(spriteSheet)
 	g.LoadMap(mapData)
 	initGame()
-	a, b := g.PalGet()
-	fmt.Printf("%v, %v\n", a, b)
+	g.PalA(12)
+	g.PalB(12)
 	g.Run()
 }
 
