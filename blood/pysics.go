@@ -4,21 +4,25 @@ import (
 	"strconv"
 )
 
-var allCollidables = [len(allEntities)]*entity{}
+var allCollidables = [len(allEntities)]int{}
 var collidablePointer = 0
 
 func doPhysics(e *entity) {
-	e.collide.deltaX = e.pos.x - e.collide.oldX
-	e.collide.deltaY = e.pos.y - e.collide.oldY
+	collide := collideComponents[e.id]
+	trans := transformComponents[e.id]
+
+	collide.deltaX = trans.x - collide.oldX
+	collide.deltaY = trans.y - collide.oldY
 	for i := 0; i < collidablePointer; i++ {
-		check := allCollidables[i]
-		if check == e {
+		cid := allCollidables[i]
+		if cid == e.id {
 			continue
 		}
-		x1, y1 := check.collide.oldX+check.collide.deltaX, check.collide.oldY+check.collide.deltaY
-		w1, h1 := check.collide.width, check.collide.height
-		x2, y2 := e.collide.oldX+e.collide.deltaX, e.collide.oldY+e.collide.deltaY
-		w2, h2 := e.collide.width, e.collide.height
+		check := collideComponents[cid]
+		x1, y1 := check.oldX+check.deltaX, check.oldY+check.deltaY
+		w1, h1 := check.width, check.height
+		x2, y2 := collide.oldX+collide.deltaX, collide.oldY+collide.deltaY
+		w2, h2 := collide.width, collide.height
 		if didCollide(x1, y1, w1, h1, x2, y2, w2, h2) {
 			debug = "collide " + strconv.Itoa(i) + "/" + strconv.Itoa(collidablePointer-1)
 		}

@@ -23,7 +23,7 @@ var allDrawSystems = [drawSystemLen]system{}
 
 type system func(*entity)
 
-func toSystem(f flag, c component, sys func(*entity)) system {
+func toSystem(f flag, c compType, sys func(*entity)) system {
 	return func(e *entity) {
 		if (e.flags&f) == f && (e.sig&c) == c {
 			sys(e)

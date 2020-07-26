@@ -14,178 +14,198 @@ func main() {
 	g.LoadSprs(spriteSheet)
 	g.LoadMap(mapData)
 	initGame()
-	g.PalA(12)
-	g.PalB(12)
 	g.Run()
 }
 
-var player int
+var player *entity
 var debug string
 
 func initGame() {
-	player = addEntity(entity{
-		flags:   playerControlled,
-		sig:     pos | spr | hp | collide,
-		hp:      100,
-		pos:     posComp{10, 10},
-		spr:     sprComp{ani: [10]int{2, 3}, aniLen: 2, aniSpeed: 60, opt: golf.SOp{H: 2, TCol: golf.Col7}},
-		collide: collidableComp{width: 8, height: 16, oldX: 10, oldY: 10},
-	})
+	player = newEntity(playerControlled,
+		&hpComponent{health: 100},
+		&transformComponent{x: 10, y: 10},
+		&sprComponent{ani: [10]int{2, 3}, aniLen: 2, aniSpeed: 60, opt: golf.SOp{H: 2, TCol: golf.Col7}},
+		&collideComponent{width: 8, height: 16, oldX: 10, oldY: 10},
+	)
 
 	//Wall
-	addEntity(entity{
-		sig:     pos | spr | collide,
-		pos:     posComp{50, 150},
-		spr:     sprComp{ani: [10]int{68}, aniLen: 1, opt: golf.SOp{H: 2, W: 4}},
-		collide: collidableComp{width: 32, height: 16, oldX: 50, oldY: 150},
-	})
+	newEntity(none,
+		&transformComponent{x: 50, y: 150},
+		&sprComponent{ani: [10]int{68}, aniLen: 1, opt: golf.SOp{H: 2, W: 4}},
+		&collideComponent{width: 32, height: 16, oldX: 50, oldY: 150},
+	)
 
 	// for i := 0; i < 15; i++ {
-	// addEnemy(rand.Intn(192), rand.Intn(192))
-	// addEnemy(rand.Intn(192), rand.Intn(192))
+	// 	addEnemy(float64(rand.Intn(192)), float64(rand.Intn(192)))
 	// }
 
-	allUpdateSystems[movePlayer] = toSystem(playerControlled, pos, func(e *entity) {
-		e.spr.ani = [10]int{2, 3}
-		e.spr.aniLen = 2
-		e.spr.aniSpeed = 60
-		e.spr.opt.W = 1
-		e.collide.width = 8
+	allUpdateSystems[movePlayer] = toSystem(playerControlled, TypeTransformComponent, func(e *entity) {
+		spr := sprComponents[e.id]
+		tran := transformComponents[e.id]
+		collide := collideComponents[e.id]
+		speed := 1.5
+
+		spr.ani = [10]int{2, 3}
+		spr.aniLen = 2
+		spr.aniSpeed = 60
+		spr.opt.W = 1
+		collide.width = 8
 		if g.Btn(golf.WKey) {
-			e.pos.y--
-			e.spr.ani = [10]int{14, 16, 18, 20, -14, -16, -18, -20}
-			e.spr.aniLen = 8
-			e.spr.aniSpeed = 10
-			e.spr.opt.W = 2
-			e.collide.width = 16
+			tran.y -= speed
+			spr.ani = [10]int{14, 16, 18, 20, -14, -16, -18, -20}
+			spr.aniLen = 8
+			spr.aniSpeed = 10
+			spr.opt.W = 2
+			collide.width = 16
 		}
 		if g.Btn(golf.SKey) {
-			e.pos.y++
-			e.spr.ani = [10]int{14, 16, 18, 20, -14, -16, -18, -20}
-			e.spr.aniLen = 8
-			e.spr.aniSpeed = 10
-			e.spr.opt.W = 2
-			e.collide.width = 16
+			tran.y += speed
+			spr.ani = [10]int{14, 16, 18, 20, -14, -16, -18, -20}
+			spr.aniLen = 8
+			spr.aniSpeed = 10
+			spr.opt.W = 2
+			collide.width = 16
 		}
 		if g.Btn(golf.AKey) {
-			e.pos.x--
-			e.spr.ani = [10]int{6, 8, 10, 12}
-			e.spr.aniLen = 4
-			e.spr.aniSpeed = 10
-			e.spr.opt.FH = false
-			e.spr.opt.W = 2
-			e.collide.width = 16
+			tran.x -= speed
+			spr.ani = [10]int{6, 8, 10, 12}
+			spr.aniLen = 4
+			spr.aniSpeed = 10
+			spr.opt.FH = false
+			spr.opt.W = 2
+			collide.width = 16
 		}
 		if g.Btn(golf.DKey) {
-			e.pos.x++
-			e.spr.ani = [10]int{6, 8, 10, 12}
-			e.spr.aniLen = 4
-			e.spr.aniSpeed = 10
-			e.spr.opt.FH = true
-			e.spr.opt.W = 2
-			e.collide.width = 16
+			tran.x += speed
+			spr.ani = [10]int{6, 8, 10, 12}
+			spr.aniLen = 4
+			spr.aniSpeed = 10
+			spr.opt.FH = true
+			spr.opt.W = 2
+			collide.width = 16
 		}
 	})
 
-	allUpdateSystems[doAI] = toSystem(0, ai|pos, func(e *entity) {
-		t := allEntities[e.ai.target]
-		dist := (((t.pos.x - e.pos.x) * (t.pos.x - e.pos.x)) + ((t.pos.y - e.pos.y) * (t.pos.y - e.pos.y)))
-		if dist > e.ai.atkRange*e.ai.atkRange {
+	allUpdateSystems[doAI] = toSystem(0, TypeAIComponent|TypeTransformComponent|TypeSprComponent, func(e *entity) {
+		ai := aiComponents[e.id]
+		tran := transformComponents[e.id]
+		spr := sprComponents[e.id]
+
+		speed := ai.speed
+		targetTran := transformComponents[ai.target]
+		dist := (((targetTran.x - tran.x) * (targetTran.x - tran.x)) + ((targetTran.y - tran.y) * (targetTran.y - tran.y)))
+		if dist > ai.atkRange*ai.atkRange {
 			return
 		}
-		e.spr.ani = [10]int{24, 25, 26}
-		e.spr.aniLen = 3
-		if e.pos.x < t.pos.x {
-			e.pos.x++
-			e.spr.opt.FH = true
+
+		if tran.x < targetTran.x {
+			tran.x += speed
+			spr.opt.FH = true
 		}
-		if e.pos.x > t.pos.x {
-			e.pos.x--
-			e.spr.opt.FH = false
+		if tran.x > targetTran.x {
+			tran.x -= speed
+			spr.opt.FH = false
 		}
-		if e.pos.y < t.pos.y {
-			e.pos.y++
+		if tran.y < targetTran.y {
+			tran.y += speed
 		}
-		if e.pos.y > t.pos.y {
-			e.pos.y--
+		if tran.y > targetTran.y {
+			tran.y -= speed
 		}
 	})
 
-	allUpdateSystems[doAttack] = toSystem(enemy, ai|pos, func(e *entity) {
-		t := &allEntities[e.ai.target]
-		hDist := t.pos.x - e.pos.x
-		vDist := t.pos.y - e.pos.y
+	allUpdateSystems[doAttack] = toSystem(enemy, TypeAIComponent|TypeTransformComponent, func(e *entity) {
+		tran := transformComponents[e.id]
+		ai := aiComponents[e.id]
+
+		target := allEntities[ai.target]
+		targetTran := transformComponents[ai.target]
+		targetHP := hpComponents[ai.target]
+		hDist := targetTran.x - tran.x
+		vDist := targetTran.y - tran.y
 		if hDist < 0 {
 			hDist *= -1
 		}
 		if vDist < 0 {
 			vDist *= -1
 		}
-		if hDist < 3 && vDist < 3 {
-			t.hp--
+		if hDist < 3 && vDist < 3 && target.hasComponent(TypeHPComponent) {
+			targetHP.health--
 		}
 	})
 
-	allUpdateSystems[startCollision] = toSystem(0, pos|collide, func(e *entity) {
+	allUpdateSystems[startCollision] = toSystem(0, TypeTransformComponent|TypeCollideComponent, func(e *entity) {
 		// Add all these entities to a list to make collision detection faster
-		allCollidables[collidablePointer] = e
+		allCollidables[collidablePointer] = e.id
 		collidablePointer++
 	})
 
-	allUpdateSystems[doCollision] = toSystem(0, pos|collide, doPhysics)
+	allUpdateSystems[doCollision] = toSystem(0, TypeTransformComponent|TypeCollideComponent, doPhysics)
 
-	allUpdateSystems[resolveCollision] = toSystem(0, pos|collide, func(e *entity) {
-		e.pos.x = e.collide.oldX + e.collide.deltaX
-		e.pos.y = e.collide.oldY + e.collide.deltaY
-		e.collide.oldX = e.pos.x
-		e.collide.oldY = e.pos.y
+	allUpdateSystems[resolveCollision] = toSystem(0, TypeTransformComponent|TypeCollideComponent, func(e *entity) {
+		tran := transformComponents[e.id]
+		collide := collideComponents[e.id]
+
+		tran.x = collide.oldX + collide.deltaX
+		tran.y = collide.oldY + collide.deltaY
+		collide.oldX = tran.x
+		collide.oldY = tran.y
 		collidablePointer = 0
 	})
 
-	allDrawSystems[drawSprite] = toSystem(0, pos|spr, func(e *entity) {
-		e.spr.frame++
-		if e.spr.aniSpeed == 0 {
-			e.spr.aniSpeed = 1
+	allDrawSystems[drawSprite] = toSystem(0, TypeTransformComponent|TypeSprComponent, func(e *entity) {
+		spr := sprComponents[e.id]
+		tran := transformComponents[e.id]
+
+		spr.frame++
+		if spr.aniSpeed == 0 {
+			spr.aniSpeed = 1
 		}
-		if e.spr.frame%e.spr.aniSpeed == 0 {
-			e.spr.aniFrame++
+		if spr.frame%spr.aniSpeed == 0 {
+			spr.aniFrame++
 		}
-		if e.spr.aniFrame >= e.spr.aniLen {
-			e.spr.aniFrame = 0
+		if spr.aniFrame >= spr.aniLen {
+			spr.aniFrame = 0
 		}
-		frame := e.spr.ani[e.spr.aniFrame]
-		opt := e.spr.opt
+		frame := spr.ani[spr.aniFrame]
+		opt := spr.opt
 		if frame < 0 {
 			opt.FH = true
 			frame *= -1
 		}
-		g.Spr(frame, e.pos.x, e.pos.y, opt)
-		if e.hasComponent(collide) {
-			g.Rect(e.pos.x, e.pos.y, e.collide.width, e.collide.height, golf.Col1)
+		g.Spr(frame, tran.x, tran.y, opt)
+		if e.hasComponent(TypeCollideComponent) {
+			collide := collideComponents[e.id]
+			g.Rect(tran.x, tran.y, collide.width, collide.height, golf.Col1)
 		}
 	})
 
-	allDrawSystems[drawHP] = toSystem(playerControlled, hp, func(e *entity) {
-		if e.hp < 0 {
+	allDrawSystems[drawHP] = toSystem(playerControlled, TypeHPComponent, func(e *entity) {
+		hp := hpComponents[e.id]
+
+		if hp.health < 0 {
 			g.TextL("You DED!", golf.TOp{Col: golf.Col3})
 			return
 		}
-		g.TextL(fmt.Sprintf("HP: %d", e.hp), golf.TOp{Col: golf.Col3})
+		g.TextL(fmt.Sprintf("HP: %d", hp.health), golf.TOp{Col: golf.Col3})
 	})
 }
 
 func update() {
+	g.PalA(12)
+	g.PalB(1)
 	runUpdateSystems()
 }
 
 func draw() {
 	g.Cls()
 	runDrawSystems()
-	a, b := allCollidables[0], allCollidables[1]
-	x1, y1 := a.collide.oldX+a.collide.deltaX, a.collide.oldY+a.collide.deltaY
-	w1, h1 := a.collide.width, a.collide.height
-	x2, y2 := b.collide.oldX+b.collide.deltaX, b.collide.oldY+b.collide.deltaY
-	w2, h2 := b.collide.width, b.collide.height
+	a := collideComponents[allCollidables[0]]
+	b := collideComponents[allCollidables[1]]
+	x1, y1 := a.oldX+a.deltaX, a.oldY+a.deltaY
+	w1, h1 := a.width, a.height
+	x2, y2 := b.oldX+b.deltaX, b.oldY+b.deltaY
+	w2, h2 := b.width, b.height
 	debug += fmt.Sprintf("\nx1 %d, y1 %d, w1 %d, h1 %d\nx2 %d, y2 %d, w1 %d, h1 %d", int(x1), int(y1), int(w1), int(h1), int(x2), int(y2), int(w2), int(h2))
 	var xO1, yO1, xO2, yO2, xO3, yO3 bool
 	if x1 >= x2 && x1 <= x2+h2 {
@@ -212,15 +232,12 @@ func draw() {
 	debug = ""
 }
 
-func addEnemy(x, y float64) int {
+func addEnemy(x, y float64) *entity {
 	// zombie
-	id := addEntity(entity{
-		flags:   enemy,
-		sig:     pos | spr | ai | collide,
-		pos:     posComp{x, y},
-		spr:     sprComp{ani: [10]int{24, 25, 26}, aniLen: 3, aniSpeed: 30, opt: golf.SOp{H: 2, TCol: golf.Col7}},
-		ai:      aiComp{atkRange: 150, target: player},
-		collide: collidableComp{width: 8, height: 16, oldX: x, oldY: y},
-	})
-	return id
+	return newEntity(enemy,
+		&transformComponent{x: x, y: y},
+		&sprComponent{ani: [10]int{24, 25, 26}, aniLen: 3, aniSpeed: 30, opt: golf.SOp{H: 2, TCol: golf.Col7}},
+		&aiComponent{atkRange: 150, target: player.id, speed: 0.25},
+		&collideComponent{width: 8, height: 16, oldX: x, oldY: y},
+	)
 }

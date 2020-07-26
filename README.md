@@ -7,6 +7,7 @@ collision detection, simple enemy AI, dialouge boxes and more. the code is curre
 
 ### BLOOD TODO
 ---
+* Fix the ECS to avoid the sparse matrix problem
 * Add demon enemy final boss
 * Use pallet swaps to go from day to night
 * Creppy story told though small conversations with the old man at the church
