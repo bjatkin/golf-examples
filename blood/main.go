@@ -39,6 +39,7 @@ func initGame() {
 	// 	addEnemy(float64(rand.Intn(192)), float64(rand.Intn(192)))
 	// }
 
+	// Player Movement
 	allUpdateSystems[movePlayer] = toSystem(playerControlled, TypeTransformComponent, func(e *entity) {
 		spr := sprComponents[e.id]
 		tran := transformComponents[e.id]
@@ -86,6 +87,7 @@ func initGame() {
 		}
 	})
 
+	// Do AI
 	allUpdateSystems[doAI] = toSystem(0, TypeAIComponent|TypeTransformComponent|TypeSprComponent, func(e *entity) {
 		ai := aiComponents[e.id]
 		tran := transformComponents[e.id]
@@ -114,6 +116,7 @@ func initGame() {
 		}
 	})
 
+	// AI attack
 	allUpdateSystems[doAttack] = toSystem(enemy, TypeAIComponent|TypeTransformComponent, func(e *entity) {
 		tran := transformComponents[e.id]
 		ai := aiComponents[e.id]
@@ -134,14 +137,16 @@ func initGame() {
 		}
 	})
 
+	// Fill the list of collidable entities
 	allUpdateSystems[startCollision] = toSystem(0, TypeTransformComponent|TypeCollideComponent, func(e *entity) {
-		// Add all these entities to a list to make collision detection faster
 		allCollidables[collidablePointer] = e.id
 		collidablePointer++
 	})
 
+	// Calculate the collisions
 	allUpdateSystems[doCollision] = toSystem(0, TypeTransformComponent|TypeCollideComponent, doPhysics)
 
+	// Finish the collision detection
 	allUpdateSystems[resolveCollision] = toSystem(0, TypeTransformComponent|TypeCollideComponent, func(e *entity) {
 		tran := transformComponents[e.id]
 		collide := collideComponents[e.id]
@@ -153,6 +158,7 @@ func initGame() {
 		collidablePointer = 0
 	})
 
+	// Draw all the sprites
 	allDrawSystems[drawSprite] = toSystem(0, TypeTransformComponent|TypeSprComponent, func(e *entity) {
 		spr := sprComponents[e.id]
 		tran := transformComponents[e.id]
@@ -180,6 +186,7 @@ func initGame() {
 		}
 	})
 
+	// Draw HP hud element
 	allDrawSystems[drawHP] = toSystem(playerControlled, TypeHPComponent, func(e *entity) {
 		hp := hpComponents[e.id]
 

@@ -31,10 +31,10 @@ func doPhysics(e *entity) {
 
 func didCollide(x1, y1, w1, h1, x2, y2, w2, h2 float64) bool {
 	var xOver, yOver bool
-	if x1 >= x2 && x1 <= x2+h2 {
+	if x1 >= x2 && x1 <= x2+w2 {
 		xOver = true
 	}
-	if x1+h1 >= x2 && x1+h1 <= x2+h2 {
+	if x1+w1 >= x2 && x1+w1 <= x2+w2 {
 		xOver = true
 	}
 	if y1 >= y2 && y1 <= y2+h2 {
