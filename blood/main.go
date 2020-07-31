@@ -10,7 +10,6 @@ var g *golf.Engine
 func main() {
 	g = golf.NewEngine(update, draw)
 
-	g.SetBG(golf.Col0)
 	g.LoadSprs(spriteSheet)
 	g.LoadMap(mapData)
 	initGame()
@@ -205,7 +204,7 @@ func update() {
 }
 
 func draw() {
-	g.Cls()
+	g.Cls(golf.Col0)
 	runDrawSystems()
 	a := collideComponents[allCollidables[0]]
 	b := collideComponents[allCollidables[1]]
