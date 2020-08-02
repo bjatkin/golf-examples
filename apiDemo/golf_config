@@ -1,0 +1,7 @@
+name=apiDemo
+spriteFile=assets/spritesheet.png
+mapFile=assets/map.png
+flagFile=assets/flag.csv
+outputSpriteFile=spritesheet.go
+outputMapFile=map.go
+outputFlagFile=flag.go
