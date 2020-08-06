@@ -7,8 +7,7 @@ import (
 	"strconv"
 	"time"
 
-	// "github.com/bjatkin/golf-engine/golf"
-	"fantasyConsole/golf"
+	"github.com/bjatkin/golf-engine/golf"
 )
 
 var g *golf.Engine
@@ -18,10 +17,9 @@ func main() {
 
 	g.LoadSprs(spriteSheet)
 	g.LoadMap(mapData)
-	// g.LoadFlags(flagData)
+
 	g.DrawMouse(1)
 
-	// g.RAM[0x3601] = 0
 	g.Run()
 }
 
@@ -98,46 +96,61 @@ func update() {
 
 func draw() {
 	g.Cls(golf.Col7)
+	// Draw the background
 	g.Map(0, 0, 24, 24, 0, 0)
+
+	// Draw the top and bottom borders
 	g.RectFill(0, 0, 192, 8, golf.Col6)
-	g.RectFill(0, 184, 192, 8, golf.Col6)
 	g.TextL("GoLF API Demo")
 	g.TextR("FPS: " + strconv.Itoa(calcFPS()))
+
+	g.RectFill(0, 184, 192, 8, golf.Col6)
 	g.Text(0, 185, "Press (<)(>)(^)(v), z or x")
 
+	// Draw the slime character
+	drawSlime()
+
+	// Draw the spining logo
 	scale := math.Sin(float64(g.Frames()-255) / 30)
 	flip := 1.0
 	if scale < 0 {
 		flip = -1.0
 	}
 
-	drawSlime()
-
 	drawLogo(scale*flip, flip != -1)
 
+	// Draw the pallet changing arrows
 	drawArrows()
 
+	// Add particals around the mouse
 	mx, my := g.Mouse()
 	for i := 0; i < 3; i++ {
 		addPartical(mx+rand.Intn(15)-7, my+rand.Intn(15)-7, golf.Col4)
 	}
+
+	// Draw all the particles
 	drawParticals()
 }
 
 func drawLogo(scale float64, flip bool) {
-	// Change to the internal sprite sheet
 	width := 64.0 * scale
+
+	// Key memory locations
 	logoBuff := 0x3647
 	spriteBase := 0x3F48
 
+	// Change to the internal sprite sheet
 	g.RAM[0x6F49] = byte(logoBuff >> 8)
 	g.RAM[0x6F4A] = byte(logoBuff & 0b0000000011111111)
+
 	fadeFrom := []golf.Col{golf.Col0, golf.Col3, golf.Col5, golf.Col7}
 	fadeTo := []golf.Col{golf.Col0, golf.Col3, golf.Col5, golf.Col7}
 	if flip {
+		// Darken the back side of the logo
 		fadeTo = []golf.Col{golf.Col0, golf.Col1, golf.Col1, golf.Col1}
 	}
 
+	// Draw the scaled logo
 	g.SSpr(152, 0, 64, 24, float64(96-width), 64.0, golf.SOp{TCol: golf.Col1, SW: scale * 2, SH: 2.0, FH: flip, PFrom: fadeFrom, PTo: fadeTo})
 
 	// Change back to the main sprite sheet
@@ -190,13 +203,14 @@ func drawArrows() {
 	rUp--
 	rDown--
 	g.Spr(s, 168, 88, golf.SOp{TCol: golf.Col7, W: 2, H: 2})
-	g.Text(0, 82, fmt.Sprintf("Pal %d", (palA&0b01111111)))
-	g.Text(156, 82, fmt.Sprintf("Pal %d", (palB&0b01111111)))
+	g.Text(0, 82, fmt.Sprintf("Pal %d", palA))
+	g.Text(156, 82, fmt.Sprintf("Pal %d", palB))
 }
 
 func drawSlime() {
 	g.SSpr(112, 0, 136, 80, 10, 104, golf.SOp{TCol: golf.Col7})
 
+	// Draw eyes that follow the mouse
 	mx, my := g.Mouse()
 	drawSlimeEye(55, 130, float64(mx+cameraX), float64(my+cameraY))
 	drawSlimeEye(80, 130, float64(mx+cameraX), float64(my+cameraY))
