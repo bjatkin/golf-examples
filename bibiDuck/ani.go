@@ -1,69 +1,119 @@
 package main
 
-import "fantasyConsole/golf"
+import (
+	"fantasyConsole/golf"
+)
 
-type aniSprite struct {
-	id     int
+type drawable interface {
+	draw(float64, float64)
+}
+
+type spr struct {
+	n int
+	o golf.SOp
+}
+
+func (s *spr) draw(x, y float64) {
+	g.Spr(s.n, x, y, s.o)
+}
+
+type ani struct {
 	frames []int
 	frame  float64
 	speed  float64
-	x, y   float64
 	o      golf.SOp
 }
 
-func (s *aniSprite) draw() {
-	g.Spr(s.frames[int(s.frame)], s.x, s.y, s.o)
-}
+func (s *ani) draw(x, y float64) {
+	g.Spr(s.frames[int(s.frame)], x, y, s.o)
 
-func (s *aniSprite) tick() {
 	s.frame += s.speed
 	if s.frame > float64(len(s.frames)) {
 		s.frame = 0
 	}
 }
 
-var allAni = []*aniSprite{}
+var allFethers = []*sprite{}
 
-func drawAniSprites() {
-	for _, ani := range allAni {
-		ani.draw()
-		ani.tick()
+func newFether(x, y float64) *sprite {
+	ret := &sprite{
+		x: x,
+		y: y,
+		a: &ani{
+			frames: []int{32, 64, 96, 128, 160, 128, 96, 64},
+			speed:  0.1,
+			o:      alpha,
+		},
 	}
-}
 
-func newFether(x, y float64) *aniSprite {
-	ret := &aniSprite{
-		id:     len(allAni),
-		frames: []int{32, 64, 96, 128, 160, 128, 96, 64},
-		speed:  0.1,
-		x:      x,
-		y:      y,
-		o:      alpha,
-	}
-	allAni = append(allAni, ret)
+	allFethers = append(allFethers, ret)
+	ret.init()
 	return ret
 }
 
-func newEgg(x, y float64) *aniSprite {
-	ret := &aniSprite{
-		id:     len(allAni),
-		frames: []int{193, 193, 193, 193, 193, 193, 193, 193, 193, 193, 195, 197, 195, 197, 195, 197},
-		speed:  0.1,
-		x:      x,
-		y:      y,
-		o:      golf.SOp{W: 2, H: 2, TCol: golf.Col5},
+var allEggs = []*sprite{}
+
+func newEgg(x, y float64) *sprite {
+	ret := &sprite{
+		x: x,
+		y: y,
+		a: &ani{
+			frames: []int{193, 193, 193, 193, 193, 193, 193, 193, 193, 193, 195, 197, 195, 197, 195, 197},
+			speed:  0.1,
+			o:      golf.SOp{W: 2, H: 2, TCol: golf.Col5},
+		},
 	}
-	allAni = append(allAni, ret)
+
+	allEggs = append(allEggs, ret)
+	ret.init()
 	return ret
 }
 
-type multiAniSprite struct {
-	id     int
-	states []aniSprite
+type stateAni struct {
+	states []drawable
 	state  int
 }
 
-func (ms *multiAniSprite) setState(state int) {
-	ms.state = state
-	allAni[ms.id] = &ms.states[state]
+func (s *stateAni) draw(x, y float64) {
+	if s.state >= len(s.states) {
+		return
+	}
+	s.states[s.state].draw(x, y)
+}
+
+func newMob(x, y float64, states []drawable) *sprite {
+	ret := &sprite{
+		x: x,
+		y: y,
+		a: &stateAni{
+			states: states,
+		},
+	}
+	ret.init()
+	return ret
+}
+
+var allSprites = []*sprite{}
+
+type sprite struct {
+	id   int
+	x, y float64
+	a    drawable
+}
+
+func (s *sprite) init() {
+	s.id = len(allSprites)
+	allSprites = append(allSprites, s)
+}
+
+func (s *sprite) delete() {
+	allSprites[s.id] = allSprites[len(allSprites)-1]
+	allSprites[s.id].id = s.id
+	allSprites = allSprites[:len(allSprites)-1]
+}
+
+func drawSprites() {
+	for _, sprite := range allSprites {
+		sprite.a.draw(sprite.x, sprite.y)
+	}
 }
