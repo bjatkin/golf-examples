@@ -20,38 +20,7 @@ collision detection, simple enemy AI, dialouge boxes and more. the code is curre
 
 ### BIBI DUCK DEMO
 ---
-* [] animate when you get a fether.
-* [] animate when you get an egg.
-* [x] Make a prompt so you can choose to talk to joe gopher.
-* [x] When talking to joe gopher freeze your controls.
-* [x] BiBi Duck portriate for talking.
-* [x] joe Gopher Protraite for talking.
-* [x] make a hud at the top of the screen.
-* [x] make an egg and fether counter in the hud.
-* [x] add talking joe Gopher sprites.
-* [x] add coyote time to make platforming feel better.
-* [x] Add bibiDuck up and down frames as well as sliding frames.
-* [x] Add map collision with sprite flags.
-* [x] Add duck movement.
-* [x] Animate the duck.
-* [x] Add fether collectables.
-* [x] add egg collectables.
-* [x] add joe Gopher.
-
-* BiBi Duck is a platformer that plays like a mario game. run around, collect fethers and find all the eggs
-* Make sure to feature the Joe Gopher to demo a diologue like system
-* Collect eggs to get powerups
-    * Jump
-    * Hover
-    * Double Jump (use wings?)
-    * Peck (pick up bugs? to feed to mr frog?)
-    * Quack (wake up go gopher? or someone else?)
-* 8x8 baby ducks will follow you when you get an egge
-* Use powerups to progress and find new eggs.
-* When you've found all the eggs and power-ups find MaMa duck with all her bibi's
-* Collect fethers as a bonus for extra challenge
-* Or maybe feathers should be health?
-* Frog Obstical, You need to feed (bugs) him in order to get him to move.
+* [] clean up the ugly ugly code XD.
 
 ### DEMO PROJECTS
 ---

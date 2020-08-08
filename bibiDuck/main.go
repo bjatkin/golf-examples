@@ -3,6 +3,7 @@ package main
 import (
 	"fantasyConsole/golf"
 	"math"
+	"math/rand"
 	"strconv"
 )
 
@@ -18,6 +19,7 @@ type player struct {
 	running, jumping, falling, sliding bool
 	faceRight                          bool
 	coyoteTime                         int
+	hp                                 int
 }
 
 var duck *player
@@ -43,6 +45,7 @@ func main() {
 	initGopher()
 	initHUD()
 	initConvo()
+	initParticles()
 
 	g.Run()
 }
@@ -58,6 +61,11 @@ func update() {
 	checkPickups()
 
 	if g.Btnp(golf.XKey) && nearGopher {
+		if duck.s.x < 387 {
+			duck.s.a.(*stateAni).state = waitRight
+		} else {
+			duck.s.a.(*stateAni).state = waitLeft
+		}
 		gopherConvo.next()
 	}
 	g.Camera(cameraX, cameraY)
@@ -65,14 +73,16 @@ func update() {
 
 func draw() {
 	g.Cls(golf.Col5)
-
 	g.Map(0, 0, 128, 128, 0, 0, alpha)
 
-	drawPlayer()
+	if !gopherConvo.running {
+		drawPlayer()
+	}
 	drawSprites()
 	drawHUD()
 	gopherConvo.draw()
 	drawSpeachBubble()
+	drawParticles()
 }
 
 func initPickups() {
@@ -164,6 +174,7 @@ func initPlayer() {
 		maxDY: 3,
 		acc:   0.5,
 		boost: 5,
+		hp:    3,
 	}
 }
 
@@ -218,6 +229,11 @@ func drawSpeachBubble() {
 }
 
 func updatePlayer() {
+	if duck.s.y > 192 {
+		duck.hp--
+		duck.s.x = 40
+		duck.s.y = 120
+	}
 	duck.dy += gravity
 	duck.dx *= friction
 	if duck.dy > duck.maxDY {
@@ -351,6 +367,9 @@ func checkPickups() {
 		if dx < 16 && dy < 16 {
 			collectedFethers++
 			fether.delete()
+			for p := 0; p < 20; p++ {
+				addParticle(fether.x, fether.y+10)
+			}
 			remove = i
 			break
 		}
@@ -366,7 +385,7 @@ func checkPickups() {
 		dy := math.Abs(egg.y - duck.s.y)
 		if dx < 16 && dy < 16 {
 			collectedEggs++
-			egg.delete()
+			egg.a.(*stateAni).state++
 			remove = i
 			break
 		}
@@ -410,7 +429,15 @@ func drawHUD() {
 	g.Rect(0, 172, 192, 20, golf.Col0, true)
 
 	// HP
-	g.Text(8, 177, "HP <3<3<4", golf.TOp{SW: 2, SH: 2, Fixed: true})
+	hearts := "HP "
+	for i := 0; i < 3; i++ {
+		if i < duck.hp {
+			hearts += "<3"
+		} else {
+			hearts += "<4"
+		}
+	}
+	g.Text(8, 177, hearts, golf.TOp{SW: 2, SH: 2, Fixed: true})
 
 	// Fether
 	g.RectFill(fether-5, 174, 38, 16, golf.Col6, true)
@@ -477,5 +504,39 @@ func initConvo() {
 		},
 		height:     192,
 		goalHeight: 192,
+	}
+}
+
+type particle struct {
+	x, y float64
+	life int
+}
+
+var allParticles = [100]*particle{}
+var pPointer = 0
+
+func initParticles() {
+	for i := 0; i < len(allParticles); i++ {
+		allParticles[i] = &particle{0, 0, 0}
+	}
+}
+
+func addParticle(x, y float64) {
+	allParticles[pPointer] = &particle{x, y, 20}
+	pPointer++
+	if pPointer >= len(allParticles) {
+		pPointer = 0
+	}
+}
+
+func drawParticles() {
+	for _, p := range allParticles {
+		if p.life <= 0 {
+			continue
+		}
+		p.x += float64(rand.Intn(3) - 1)
+		p.y += float64(rand.Intn(5) - 3)
+		p.life--
+		g.Pset(p.x-float64(cameraX), p.y, golf.Col7)
 	}
 }

@@ -18,10 +18,11 @@ func (s *spr) draw(x, y float64) {
 }
 
 type ani struct {
-	frames []int
-	frame  float64
-	speed  float64
-	o      golf.SOp
+	frames   []int
+	frame    float64
+	speed    float64
+	o        golf.SOp
+	onlyOnce bool
 }
 
 func (s *ani) draw(x, y float64) {
@@ -29,7 +30,10 @@ func (s *ani) draw(x, y float64) {
 
 	s.frame += s.speed
 	if s.frame >= float64(len(s.frames)) {
-		s.frame = 0
+		s.frame = float64(len(s.frames) - 1)
+		if !s.onlyOnce {
+			s.frame = 0
+		}
 	}
 }
 
@@ -57,10 +61,20 @@ func newEgg(x, y float64) *sprite {
 	ret := &sprite{
 		x: x,
 		y: y,
-		a: &ani{
-			frames: []int{193, 193, 193, 193, 193, 193, 193, 193, 193, 193, 195, 197, 195, 197, 195, 197},
-			speed:  0.1,
-			o:      golf.SOp{W: 2, H: 2, TCol: golf.Col5},
+		a: &stateAni{
+			states: []drawable{
+				&ani{ // Shake
+					frames: []int{193, 193, 193, 193, 193, 193, 193, 193, 193, 193, 195, 197, 195, 197, 195, 197},
+					speed:  0.1,
+					o:      golf.SOp{W: 2, H: 2, TCol: golf.Col5},
+				},
+				&ani{ // Collected
+					frames:   []int{193, 199, 75, 199, 75, 199, 75, 199, 75},
+					speed:    0.1,
+					o:        golf.SOp{W: 2, H: 2, TCol: golf.Col5},
+					onlyOnce: true,
+				},
+			},
 		},
 	}
 
