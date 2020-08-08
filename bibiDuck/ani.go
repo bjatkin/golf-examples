@@ -28,7 +28,7 @@ func (s *ani) draw(x, y float64) {
 	g.Spr(s.frames[int(s.frame)], x, y, s.o)
 
 	s.frame += s.speed
-	if s.frame > float64(len(s.frames)) {
+	if s.frame >= float64(len(s.frames)) {
 		s.frame = 0
 	}
 }
