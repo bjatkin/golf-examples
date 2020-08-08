@@ -22,8 +22,8 @@ collision detection, simple enemy AI, dialouge boxes and more. the code is curre
 ---
 * [] animate when you get a fether.
 * [] animate when you get an egg.
-* [] Make a prompt so you can choose to talk to joe gopher.
-* [] When talking to joe gopher freeze your controls.
+* [x] Make a prompt so you can choose to talk to joe gopher.
+* [x] When talking to joe gopher freeze your controls.
 * [x] BiBi Duck portriate for talking.
 * [x] joe Gopher Protraite for talking.
 * [x] make a hud at the top of the screen.

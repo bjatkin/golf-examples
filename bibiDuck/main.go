@@ -40,6 +40,7 @@ func main() {
 
 	initPickups()
 	initPlayer()
+	initGopher()
 	initHUD()
 	initConvo()
 
@@ -50,11 +51,13 @@ var drawMap bool
 var cameraX, cameraY int
 
 func update() {
-	updatePlayer()
+	if !gopherConvo.running {
+		updatePlayer()
+	}
 	updateCamera()
 	checkPickups()
 
-	if g.Btnp(golf.ZKey) {
+	if g.Btnp(golf.XKey) && nearGopher {
 		gopherConvo.next()
 	}
 	g.Camera(cameraX, cameraY)
@@ -69,6 +72,7 @@ func draw() {
 	drawSprites()
 	drawHUD()
 	gopherConvo.draw()
+	drawSpeachBubble()
 }
 
 func initPickups() {
@@ -161,6 +165,56 @@ func initPlayer() {
 		acc:   0.5,
 		boost: 5,
 	}
+}
+
+func initGopher() {
+	for x := 0; x < 128; x++ {
+		for y := 0; y < 128; y++ {
+			if g.Mget(x, y) == 201 {
+				g.Mset(x, y, 0)
+				g.Mset(x+1, y, 0)
+				g.Mset(x, y+1, 0)
+				g.Mset(x+1, y+1, 0)
+				newMob(float64(x*8), float64(y*8), []drawable{
+					&ani{ //Waiting
+						frames: []int{201, 203},
+						speed:  0.05,
+						o:      golf.SOp{W: 2, H: 2},
+					},
+					&ani{ //Talking
+						frames: []int{137, 201},
+						speed:  0.05,
+						o:      golf.SOp{W: 2, H: 2},
+					},
+				})
+				break
+			}
+		}
+	}
+}
+
+var nearGopher bool
+
+func drawSpeachBubble() {
+	x, y := 387.0, 125.0
+	dx := math.Abs(duck.s.x - x)
+	dy := math.Abs(duck.s.y - y)
+	if dx > 30 || dy > 30 {
+		nearGopher = false
+		return
+	}
+	nearGopher = true
+	g.Spr(73, x, y, golf.SOp{W: 2, H: 2, TCol: golf.Col5})
+	yy := y + 3
+	if (g.Frames()/30)%2 == 0 {
+		yy = y + 4
+	}
+	g.Text(x+4, y+4, "(x)", golf.TOp{Col: golf.Col4})
+	g.Text(x+6, y+4, "(x)", golf.TOp{Col: golf.Col4})
+	g.Text(x+5, y+4, "(x)", golf.TOp{Col: golf.Col4})
+	g.Text(x+4, yy, "(x)")
+	g.Text(x+6, yy, "(x)")
+	g.Text(x+5, yy, "(x)")
 }
 
 func updatePlayer() {
@@ -352,20 +406,20 @@ func drawHUD() {
 	eggs := 140.0
 
 	// Outline
-	g.RectFill(float64(cameraX), float64(cameraY)+172, 192, 20, golf.Col7)
-	g.Rect(float64(cameraX), float64(cameraY)+172, 192, 20, golf.Col0)
+	g.RectFill(0, 172, 192, 20, golf.Col7, true)
+	g.Rect(0, 172, 192, 20, golf.Col0, true)
 
 	// HP
 	g.Text(8, 177, "HP <3<3<4", golf.TOp{SW: 2, SH: 2, Fixed: true})
 
 	// Fether
-	g.RectFill(fether-5+float64(cameraX), 174, 38, 16, golf.Col6)
+	g.RectFill(fether-5, 174, 38, 16, golf.Col6, true)
 	shinyFether.draw(fether, 179)
 	g.Spr(16, fether+8, 179, golf.SOp{TCol: golf.Col5, Fixed: true})
 	g.Text(fether+16, 180, strconv.Itoa(collectedFethers), golf.TOp{Fixed: true})
 
 	// Egg
-	g.RectFill(eggs-5+float64(cameraX), 174, 44, 16, golf.Col6)
+	g.RectFill(eggs-5, 174, 44, 16, golf.Col6, true)
 	shinyEgg.draw(eggs, 174)
 	g.Spr(16, eggs+14, 179, golf.SOp{TCol: golf.Col5, Fixed: true})
 	g.Text(eggs+22, 180, strconv.Itoa(collectedEggs), golf.TOp{Fixed: true})
@@ -377,11 +431,12 @@ type convo struct {
 	line       int
 	height     int
 	goalHeight int
+	running    bool
 }
 
 func (c *convo) draw() {
-	g.RectFill(float64(cameraX), float64(c.height), 192, 34, golf.Col7)
-	g.Rect(float64(cameraX), float64(c.height), 192, 34, golf.Col0)
+	g.RectFill(0, float64(c.height), 192, 34, golf.Col7, true)
+	g.Rect(0, float64(c.height), 192, 34, golf.Col0, true)
 	g.Spr(c.portrait[c.line], 1, float64(c.height)+2, golf.SOp{W: 4, H: 4, TCol: golf.Col5, Fixed: true})
 	if c.height < c.goalHeight {
 		c.height++
@@ -393,6 +448,11 @@ func (c *convo) draw() {
 }
 
 func (c *convo) next() {
+	if !c.running {
+		c.running = true
+		c.goalHeight = 158
+		c.line = 0
+	}
 	if c.height != c.goalHeight {
 		c.height = c.goalHeight
 		return
@@ -401,6 +461,7 @@ func (c *convo) next() {
 	if c.line >= len(c.lines) {
 		c.line--
 		c.goalHeight = 192
+		c.running = false
 	}
 }
 
@@ -410,11 +471,11 @@ func initConvo() {
 	gopherConvo = &convo{
 		portrait: []int{65, 69, 65},
 		lines: []string{
-			"BIBI DUCK: Hey do you know\nhow to get out of this\nplace!?",
+			"BIBI DUCK: Hey, do you\nknow how to get out of\nthis place!?",
 			"JOE GOPHER: Why would you\nwant to leave?\nThis place is great!",
 			"BIBI DUCK: Oh...",
 		},
 		height:     192,
-		goalHeight: 158,
+		goalHeight: 192,
 	}
 }
