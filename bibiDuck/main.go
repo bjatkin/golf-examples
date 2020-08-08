@@ -3,6 +3,7 @@ package main
 import (
 	"fantasyConsole/golf"
 	"math"
+	"strconv"
 )
 
 var g *golf.Engine
@@ -39,6 +40,8 @@ func main() {
 
 	initPickups()
 	initPlayer()
+	initHUD()
+	initConvo()
 
 	g.Run()
 }
@@ -51,6 +54,9 @@ func update() {
 	updateCamera()
 	checkPickups()
 
+	if g.Btnp(golf.ZKey) {
+		gopherConvo.next()
+	}
 	g.Camera(cameraX, cameraY)
 }
 
@@ -61,6 +67,8 @@ func draw() {
 
 	drawPlayer()
 	drawSprites()
+	drawHUD()
+	gopherConvo.draw()
 }
 
 func initPickups() {
@@ -228,7 +236,7 @@ func updatePlayer() {
 
 	// Stop Sliding
 	if duck.sliding {
-		if math.Abs(duck.dx) < 0.75 || duck.running {
+		if math.Abs(duck.dx) < 0.2 || duck.running {
 			duck.dx = 0
 			duck.sliding = false
 		}
@@ -287,6 +295,7 @@ func checkPickups() {
 		dx := math.Abs(fether.x - duck.s.x)
 		dy := math.Abs(fether.y - duck.s.y)
 		if dx < 16 && dy < 16 {
+			collectedFethers++
 			fether.delete()
 			remove = i
 			break
@@ -302,6 +311,7 @@ func checkPickups() {
 		dx := math.Abs(egg.x - duck.s.x)
 		dy := math.Abs(egg.y - duck.s.y)
 		if dx < 16 && dy < 16 {
+			collectedEggs++
 			egg.delete()
 			remove = i
 			break
@@ -316,4 +326,95 @@ func checkPickups() {
 func collideMap(x, y float64) bool {
 	tile := g.Mget(int(x/8), int(y/8))
 	return g.Fget(tile, 0)
+}
+
+var shinyFether *ani
+var shinyEgg *ani
+var collectedFethers int
+var collectedEggs int
+
+func initHUD() {
+	shinyFether = &ani{
+		frames: []int{32, 32, 32, 32, 32, 32, 32, 32, 192, 224, 256, 288},
+		speed:  0.1,
+		o:      golf.SOp{TCol: golf.Col5, Fixed: true},
+	}
+
+	shinyEgg = &ani{
+		frames: []int{193, 193, 193, 193, 193, 193, 193, 193, 257, 259, 261, 263},
+		speed:  0.1,
+		o:      golf.SOp{W: 2, H: 2, TCol: golf.Col5, Fixed: true},
+	}
+}
+
+func drawHUD() {
+	fether := 95.0
+	eggs := 140.0
+
+	// Outline
+	g.RectFill(float64(cameraX), float64(cameraY)+172, 192, 20, golf.Col7)
+	g.Rect(float64(cameraX), float64(cameraY)+172, 192, 20, golf.Col0)
+
+	// HP
+	g.Text(8, 177, "HP <3<3<4", golf.TOp{SW: 2, SH: 2, Fixed: true})
+
+	// Fether
+	g.RectFill(fether-5+float64(cameraX), 174, 38, 16, golf.Col6)
+	shinyFether.draw(fether, 179)
+	g.Spr(16, fether+8, 179, golf.SOp{TCol: golf.Col5, Fixed: true})
+	g.Text(fether+16, 180, strconv.Itoa(collectedFethers), golf.TOp{Fixed: true})
+
+	// Egg
+	g.RectFill(eggs-5+float64(cameraX), 174, 44, 16, golf.Col6)
+	shinyEgg.draw(eggs, 174)
+	g.Spr(16, eggs+14, 179, golf.SOp{TCol: golf.Col5, Fixed: true})
+	g.Text(eggs+22, 180, strconv.Itoa(collectedEggs), golf.TOp{Fixed: true})
+}
+
+type convo struct {
+	portrait   []int
+	lines      []string
+	line       int
+	height     int
+	goalHeight int
+}
+
+func (c *convo) draw() {
+	g.RectFill(float64(cameraX), float64(c.height), 192, 34, golf.Col7)
+	g.Rect(float64(cameraX), float64(c.height), 192, 34, golf.Col0)
+	g.Spr(c.portrait[c.line], 1, float64(c.height)+2, golf.SOp{W: 4, H: 4, TCol: golf.Col5, Fixed: true})
+	if c.height < c.goalHeight {
+		c.height++
+	}
+	if c.height > c.goalHeight {
+		c.height--
+	}
+	g.Text(35, float64(c.height+4), c.lines[c.line], golf.TOp{Fixed: true})
+}
+
+func (c *convo) next() {
+	if c.height != c.goalHeight {
+		c.height = c.goalHeight
+		return
+	}
+	c.line++
+	if c.line >= len(c.lines) {
+		c.line--
+		c.goalHeight = 192
+	}
+}
+
+var gopherConvo *convo
+
+func initConvo() {
+	gopherConvo = &convo{
+		portrait: []int{65, 69, 65},
+		lines: []string{
+			"BIBI DUCK: Hey do you know\nhow to get out of this\nplace!?",
+			"JOE GOPHER: Why would you\nwant to leave?\nThis place is great!",
+			"BIBI DUCK: Oh...",
+		},
+		height:     192,
+		goalHeight: 158,
+	}
 }
