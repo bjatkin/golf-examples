@@ -5,9 +5,15 @@ This is a small ARPG game where you play a vampire killing monsters and collecti
 of the GOLF engine including things like sprite sheets, map files and drawing text on screen. It also demonstrates common RPG game elements like character movement
 collision detection, simple enemy AI, dialouge boxes and more. the code is currently in development so to see the final version you'll need to check back later.
 
+[] Update the repo readme.
+
 ### WANDER TYPE DEMO
 ---
-[] Build a simple tile set
+[] dog running sprites.
+[] player walking sprites up, down, left, right.
+[] talking guard sprites.
+[] build boot house interior.
+[] finalize the script and add it to the repo.
 
 ### BLOOD DEMO
 ---
@@ -25,13 +31,3 @@ collision detection, simple enemy AI, dialouge boxes and more. the code is curre
 ### DEMO PROJECTS
 ---
 DONE
-
-* add a simple one screen project to demonstrate the golf engines basic features
-    * sprite scaling
-    * camera movement
-    * the map
-    * the sprite sheet
-    * drawing squares and triangles
-    * drawing text
-    * pallet swaping
-    * sprite flipping
