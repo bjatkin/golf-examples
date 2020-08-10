@@ -1,0 +1,104 @@
+----- Talking to the gaurds at the top of the map -------
+guard 1: Sorry kid, we can't let you pass.
+guard 2: Ya, the developer forgot to code in this area!
+         If we let you pass, the game might crash
+guard 1: Ending all life as we know it!
+guard 2: The end of the universe!
+guard 1: Armageden realized!
+guard 2: ... or you might to end up off screen.
+         Its hard to know for sure.
+---------------------------------------------------------
+* full conversation repeats each time
+
+------- Old man in the boot house ---------
+old man: achoo... *sniffel*
+         Oh it's you! Our town has waited 100 years
+         for your arival! The prophasy has been fulfilled!
+         You shal bring peach an justice to this land!
+         Here young warrior take this magic sword
+         and face your destitny!
+notification: You got a used tissue...
+-------------------------------------------
+
+-- Old man 2nd time (and all future times) --
+old man: ...blah blah blah wisdom and stuff...
+         haha, I love being old :).
+---------------------------------------------
+
+--- Lady in the house with the old man ------
+lady: I'm pretty sure my dad is loosing it.
+      ...At least he seems happy.
+---------------------------------------------
+
+-- Man by the well -----------------------------
+man: I'm so tired of standing by this stupid
+     well. I just feel like I've been rooted to
+     this spot forever you know. fortunately
+     I had a coin to make a wish. Once it's
+     granted I'm gonna see the world!
+------------------------------------------------
+* full convo repeats each time
+
+--- The Well -----------------------------------
+well: I heard that guy call me stupid. There's
+      no way I'm granting his wish now! good
+      luck seeing the world with now path
+      finding ai weirdo!
+------------------------------------------------
+* full convo repeats each time
+
+---- Kid by the lake ------------------
+kid: Man, I'd love to be a fish...
+     Clothes are the worst.
+* kid: Fish get to be naked any time
+       they want. Stupid lucky fish...
+---------------------------------------
+* line repeats for each future convo
+
+---- Guy in the small house -----------
+guy: Man, my land lord raised the rent
+     again. I don't know how I'm gonna
+     keep up with it.
+---------------------------------------
+
+--- Guy after you talk to the dog -----
+guy: Well, I don't know how i'll do it
+     next month but I managed to get
+     18,000 kibble in time to pay my
+     rent. Does it seem odd to you
+     that I have to pay my rent in
+     dog food?
+---------------------------------------
+
+--- Dog -------------------------------------
+dog: *bark* *bark* man home ownership
+     is great. All these lazy millenials
+     complain that it's impossible. In
+     my expericne all it takes is a little
+     hard work and a small loan of a million
+     dollars from your dad.
+---------------------------------------------
+* repeats forever
+
+--- Kid before 256 ticks -------------
+kid: 1...
+     2...
+     3...
+     I'm gonna be the first kid ever
+     to count to 256!
+--------------------------------------
+* conversation ticks every 30 frames
+
+--- Kid after 256 ticks --------------
+kid: Oh good! You're here!
+     I wanted someone to witness me 
+     finishing the count!
+     254...
+     255...
+     1...
+     Wait what?
+--------------------------------------
+
+-- Kid in all future conversations --
+kid: I'm so confused...
+-------------------------------------
