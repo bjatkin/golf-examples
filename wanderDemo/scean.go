@@ -44,6 +44,10 @@ var bootHouse = scean{
 var townScean = scean{
 	mapXY: vec2{0, 0},
 	mapWH: vec2{52, 37},
+	poi: []*interaction{
+		&townSignInter,
+		&talkingWellInter,
+	},
 }
 
 // We have to do this to prevent an infinite type checking loop
@@ -67,4 +71,14 @@ func linkSceans(a *scean, exitA, enterA vec2, b *scean, exitB, enterB vec2) {
 
 func (s *scean) draw() {
 	g.Map(int(s.mapXY.x), int(s.mapXY.y), int(s.mapWH.x), int(s.mapWH.y), 0, 0)
+}
+
+func (s *scean) drawPOI(player vec2) {
+	for _, poi := range s.poi {
+		dx := math.Abs(poi.location.x - player.x)
+		dy := math.Abs(poi.location.y - player.y)
+		if dx < 30 && dy < 30 {
+			drawInteractionSign(poi.location)
+		}
+	}
 }

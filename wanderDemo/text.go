@@ -37,6 +37,7 @@ var allLines = []string{
 	"254...\n255...",
 	"1!!!\nWait what???",
 	"I'm so confused...",
+	"welcome to... uh red... blue town... I guess.",
 }
 
 func fillTemplate(in string) string {

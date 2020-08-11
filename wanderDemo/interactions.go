@@ -1,5 +1,7 @@
 package main
 
+import "fantasyConsole/golf"
+
 type interaction struct {
 	location    vec2
 	lines       []int
@@ -43,7 +45,8 @@ var wellManInter = interaction{
 }
 
 var talkingWellInter = interaction{
-	lines: []int{14, 15},
+	location: vec2{337, 60},
+	lines:    []int{14, 15},
 }
 
 var fishKidInter = interaction{
@@ -60,4 +63,23 @@ var talkingDogInter = interaction{
 
 var countingKidInter = interaction{
 	lines: []int{24, 25},
+}
+
+var townSignInter = interaction{
+	location: vec2{129, 190},
+	lines:    []int{31},
+}
+
+func drawInteractionSign(spot vec2) {
+	o := golf.SOp{TCol: golf.Col6, W: 2, H: 2}
+	switch (g.Frames() / 20) % 4 {
+	case 0:
+		g.Spr(131, spot.x, spot.y-22, o)
+	case 1:
+		g.Spr(133, spot.x, spot.y-23, o)
+	case 2:
+		g.Spr(135, spot.x, spot.y-22, o)
+	case 3:
+		g.Spr(133, spot.x, spot.y-23, o)
+	}
 }

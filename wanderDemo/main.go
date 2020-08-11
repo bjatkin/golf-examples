@@ -56,13 +56,14 @@ func draw() {
 	g.Cls(golf.Col4)
 	mainScean.draw()
 	drawPlayer()
-	if g.Frames()%2 == 0 && false {
-		for x := 0.0; x < mainScean.mapWH.x; x++ {
-			for y := 0.0; y < mainScean.mapWH.y; y++ {
-				if g.Fget(g.Mget(int(x+mainScean.mapXY.x), int(y+mainScean.mapXY.y)), 0) {
-					g.RectFill(x*8, y*8, 8, 8, golf.Col0)
-				}
-			}
-		}
-	}
+	mainScean.drawPOI(playerXY)
+	// if g.Frames()%2 == 0 {
+	// 	for x := 0.0; x < mainScean.mapWH.x; x++ {
+	// 		for y := 0.0; y < mainScean.mapWH.y; y++ {
+	// 			if g.Fget(g.Mget(int(x+mainScean.mapXY.x), int(y+mainScean.mapXY.y)), 0) {
+	// 				g.RectFill(x*8, y*8, 8, 8, golf.Col0)
+	// 			}
+	// 		}
+	// 	}
+	// }
 }
