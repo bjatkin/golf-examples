@@ -9,9 +9,11 @@ collision detection, simple enemy AI, dialouge boxes and more. the code is curre
 
 ### WANDER TYPE DEMO
 ---
-[] get other character sprites into the game.
-[] make it possible to talk to the POI's
-[] start adding events to the system to update iteraction.
+[] fix apostraphy's not displaying
+[] when you are walking up shift the player left/right to make walking into doors easier
+[] add a note that says the store is closed (late stage RPG economies joke)
+[] fix the little counting girl joke. EVents are not firing correctly?
+[] use non coliding wall sprite at the bottom of the walls. (Add wall paper?)
 
 ### BIBI DUCK DEMO
 ---
