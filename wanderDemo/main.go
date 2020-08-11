@@ -12,51 +12,57 @@ func main() {
 	g.LoadSprs(spriteSheet)
 	g.LoadMap(mapData)
 	g.LoadFlags(spriteFlags)
-	g.PalA(2)
-	g.PalB(3)
+	initGame()
 
 	g.Run()
 }
 
-var cameraX, cameraY = 0, 0
+func initGame() {
+	// Pallet for the starting logo
+	g.PalA(2)
+	g.PalB(3)
+
+	initSceans()
+}
 
 func update() {
 	g.PalA(3)
 	g.PalB(10)
-	if g.Btn(golf.WKey) {
-		cameraY--
+	cx, cy := int(playerXY.x)-88, int(playerXY.y)-88
+	if cx < 0 && mainScean.mapWH.x >= 16 {
+		cx = 0
 	}
-	if g.Btn(golf.SKey) {
-		cameraY++
+	if cy < 0 && mainScean.mapWH.y >= 16 {
+		cy = 0
 	}
-	if g.Btn(golf.DKey) {
-		cameraX++
+	if cx > int((mainScean.mapWH.x-24)*8) && mainScean.mapWH.x >= 16 {
+		cx = int((mainScean.mapWH.x - 24) * 8)
 	}
-	if g.Btn(golf.AKey) {
-		cameraX--
+	if cy > int((mainScean.mapWH.y-24)*8) && mainScean.mapWH.y >= 16 {
+		cy = int((mainScean.mapWH.y - 24) * 8)
 	}
-	if cameraX < 0 {
-		cameraX = 0
-	}
-	if cameraX > 832 {
-		cameraX = 832
-	}
-	if cameraY < 0 {
-		cameraY = 0
-	}
-	if cameraY > 832 {
-		cameraY = 832
-	}
-	g.Camera(cameraX, cameraY)
+	g.Camera(cx, cy)
+
+	updatePlayer()
 
 	newScean, exited := exitScean(playerXY)
 	if exited {
-		playerXY = newScean.entrances[mainScean]
+		playerXY = newScean.entrances[mainScean][1]
 		mainScean = newScean
 	}
 }
 
 func draw() {
-	g.Cls(golf.Col7)
+	g.Cls(golf.Col4)
 	mainScean.draw()
+	drawPlayer()
+	if g.Frames()%2 == 0 && false {
+		for x := 0.0; x < mainScean.mapWH.x; x++ {
+			for y := 0.0; y < mainScean.mapWH.y; y++ {
+				if g.Fget(g.Mget(int(x+mainScean.mapXY.x), int(y+mainScean.mapXY.y)), 0) {
+					g.RectFill(x*8, y*8, 8, 8, golf.Col0)
+				}
+			}
+		}
+	}
 }
