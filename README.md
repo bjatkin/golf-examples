@@ -9,11 +9,17 @@ collision detection, simple enemy AI, dialouge boxes and more. the code is curre
 
 ### WANDER TYPE DEMO
 ---
-[] dog running sprites.
-[] player walking sprites up, down, left, right.
-[] talking guard sprites.
-[] build boot house interior.
-[] finalize the script and add it to the repo.
+[] get other character sprites into the game.
+[] make it possible to talk to the POI's
+[] start adding events to the system to update iteraction.
+
+### BIBI DUCK DEMO
+---
+* [] clean up the ugly ugly code XD.
+
+### DEMO PROJECTS
+---
+DONE
 
 ### BLOOD DEMO
 ---
@@ -23,11 +29,3 @@ collision detection, simple enemy AI, dialouge boxes and more. the code is curre
 * Creppy story told though small conversations with the old man at the church
 * Maybe do celest hair on the character (should be bold red color)
 * Make red blood that you collect as enemies die
-
-### BIBI DUCK DEMO
----
-* [] clean up the ugly ugly code XD.
-
-### DEMO PROJECTS
----
-DONE
