@@ -22,34 +22,57 @@ func initGame() {
 	g.PalA(2)
 	g.PalB(3)
 
+	initEventHandler()
 	initSceans()
+	initCharacterEvents()
 }
 
 func update() {
 	g.PalA(3)
 	g.PalB(10)
-	cx, cy := int(playerXY.x)-88, int(playerXY.y)-88
+
+	updateCamera()
+	updatePlayer()
+
+	newScean, exited := exitScean(playerXY)
+	if exited {
+		prevScean = mainScean
+		mainScean = newScean
+		transitionStart = g.Frames()
+		g.Update = updateTransition
+		g.Draw = drawTransition
+	}
+
+	if g.Btnp(golf.ZKey) {
+		poi, interact := interactWithScean(playerXY)
+		if interact {
+			poi.resetInteraction()
+			mainInteraction = poi
+			g.Update = updateInteraction
+			g.Draw = drawInteraction
+		}
+	}
+
+	if g.Frames() == 253*30 {
+		storyEventHandler.sendEvent(twoFiftySixSecondsPassed)
+	}
+}
+
+func updateCamera() {
+	cx, cy := playerXY.x-88, playerXY.y-88
 	if cx < 0 && mainScean.mapWH.x >= 16 {
 		cx = 0
 	}
 	if cy < 0 && mainScean.mapWH.y >= 16 {
 		cy = 0
 	}
-	if cx > int((mainScean.mapWH.x-24)*8) && mainScean.mapWH.x >= 16 {
-		cx = int((mainScean.mapWH.x - 24) * 8)
+	if cx > (mainScean.mapWH.x-24)*8 && mainScean.mapWH.x >= 16 {
+		cx = (mainScean.mapWH.x - 24) * 8
 	}
-	if cy > int((mainScean.mapWH.y-24)*8) && mainScean.mapWH.y >= 16 {
-		cy = int((mainScean.mapWH.y - 24) * 8)
+	if cy > (mainScean.mapWH.y-24)*8 && mainScean.mapWH.y >= 16 {
+		cy = (mainScean.mapWH.y - 24) * 8
 	}
-	g.Camera(cx, cy)
-
-	updatePlayer()
-
-	newScean, exited := exitScean(playerXY)
-	if exited {
-		playerXY = newScean.entrances[mainScean][1]
-		mainScean = newScean
-	}
+	g.Camera(int(cx), int(cy))
 }
 
 func draw() {
@@ -57,13 +80,32 @@ func draw() {
 	mainScean.draw()
 	drawPlayer()
 	mainScean.drawPOI(playerXY)
-	// if g.Frames()%2 == 0 {
-	// 	for x := 0.0; x < mainScean.mapWH.x; x++ {
-	// 		for y := 0.0; y < mainScean.mapWH.y; y++ {
-	// 			if g.Fget(g.Mget(int(x+mainScean.mapXY.x), int(y+mainScean.mapXY.y)), 0) {
-	// 				g.RectFill(x*8, y*8, 8, 8, golf.Col0)
-	// 			}
-	// 		}
-	// 	}
-	// }
+}
+
+func updateTransition() {
+	updateCamera()
+}
+
+var transitionStart = 0
+
+func drawTransition() {
+	f := float64(g.Frames()-transitionStart) * 2
+	if f <= 96 {
+		g.RectFill(f-96, 0, 96, 192, golf.Col0, true)
+		g.RectFill(192-f, 0, 96, 192, golf.Col0, true)
+	}
+	if f > 96 {
+		g.Cls(golf.Col4)
+		mainScean.draw()
+		playerXY = mainScean.entrances[prevScean][1]
+		playerWalking = false
+		drawPlayer()
+
+		g.RectFill(-(f - 96), 0, 96, 192, golf.Col0, true)
+		g.RectFill(96+(f-96), 0, 96, 192, golf.Col0, true)
+	}
+	if f > 192 {
+		g.Update = update
+		g.Draw = draw
+	}
 }
