@@ -23,37 +23,37 @@ func updatePlayer() {
 	if g.Btnp(golf.TKey) {
 		fmt.Printf("%v\n", playerXY)
 	}
-	if g.Btn(golf.WKey) {
+	if g.Btn(golf.UpArrow) {
 		playerFacing = facingUp
 		playerXY.y -= playerSpeed
-		if mapCollide(playerXY) {
+		if mapCollide(playerXY) || sceanCollide(playerXY) {
 			playerXY.y += playerSpeed
 		}
 		playerWalking = true
 		playerOpt.FH = false
 	}
-	if g.Btn(golf.SKey) {
+	if g.Btn(golf.DownArrow) {
 		playerFacing = facingDown
 		playerXY.y += playerSpeed
-		if mapCollide(playerXY) {
+		if mapCollide(playerXY) || sceanCollide(playerXY) {
 			playerXY.y -= playerSpeed
 		}
 		playerWalking = true
 		playerOpt.FH = false
 	}
-	if g.Btn(golf.AKey) {
+	if g.Btn(golf.LeftArrow) {
 		playerFacing = facingLeft
 		playerXY.x -= playerSpeed
-		if mapCollide(playerXY) {
+		if mapCollide(playerXY) || sceanCollide(playerXY) {
 			playerXY.x += playerSpeed
 		}
 		playerWalking = true
 		playerOpt.FH = false
 	}
-	if g.Btn(golf.DKey) {
+	if g.Btn(golf.RightArrow) {
 		playerFacing = facingRight
 		playerXY.x += playerSpeed
-		if mapCollide(playerXY) {
+		if mapCollide(playerXY) || sceanCollide(playerXY) {
 			playerXY.x -= playerSpeed
 		}
 		playerWalking = true
@@ -98,4 +98,13 @@ func mapCollide(p vec2) bool {
 	i := g.Fget(g.Mget(int((p.x+8)/8)+x, int((p.y+16)/8))+y, 0)
 
 	return (a || b || c || d || e || f || h || i)
+}
+
+func sceanCollide(player vec2) bool {
+	for _, c := range mainScean.collide {
+		if c.collide(player) {
+			return true
+		}
+	}
+	return false
 }
