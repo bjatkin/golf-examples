@@ -19,7 +19,6 @@ func main() {
 }
 
 var cameraX, cameraY = 0, 0
-var currentScean = &mainScean
 
 func update() {
 	g.PalA(3)
@@ -49,9 +48,15 @@ func update() {
 		cameraY = 832
 	}
 	g.Camera(cameraX, cameraY)
+
+	newScean, exited := exitScean(playerXY)
+	if exited {
+		playerXY = newScean.entrances[mainScean]
+		mainScean = newScean
+	}
 }
 
 func draw() {
 	g.Cls(golf.Col7)
-	currentScean.draw()
+	mainScean.draw()
 }
