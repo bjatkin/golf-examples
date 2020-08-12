@@ -6,9 +6,22 @@ of the GOLF engine including things like sprite sheets, map files and drawing te
 collision detection, simple enemy AI, dialouge boxes and more. the code is currently in development so to see the final version you'll need to check back later.
 
 ### TODO
-[] Update the repo readme.
+[] Add a section on running these demos
+[] Add an MIT license to this repo as well
+[] Add some screen shots of the different games to the main read me
+[] Add a link to the golf readme
+[] Add a description to the bibi duck project
+[] Add a features list to the bibi duck project
+[] Add some screen shots of the bibi duck project
+[] Add a description to the wander project
+[] Add a features list to the wander project
+[] Add some screen shots of the wander project
+[] Add a description to the blood project
+[] Add a features list to the blood project
+[] Add some screen shots of the wander project
+[] Finish the blood demo
 
-### WANDER TYPE DEMO
+### WANDER DEMO
 ---
 DONE
 
@@ -16,15 +29,18 @@ DONE
 ---
 DONE
 
-### DEMO PROJECTS
+### API DEMO
 ---
 DONE
 
 ### BLOOD DEMO
 ---
-* add collision detection
-* Add demon enemy final boss
-* Use pallet swaps to go from day to night
-* Creppy story told though small conversations with the old man at the church
-* Maybe do celest hair on the character (should be bold red color)
-* Make red blood that you collect as enemies die
+MVP todo  list
+[] add collision detection
+[] use pallet swap from day to night as the start screen
+[] collect red blood as you kill enemies
+[] blood particle system when you kill enemies/ are killed
+[] add in all the enemy types
+[] attack and be attacked
+[] HP bar
+[] Point counter (Blood Droplets)
