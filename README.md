@@ -14,7 +14,7 @@ DONE
 
 ### BIBI DUCK DEMO
 ---
-* [] clean up the ugly ugly code XD.
+DONE
 
 ### DEMO PROJECTS
 ---
