@@ -9,11 +9,7 @@ collision detection, simple enemy AI, dialouge boxes and more. the code is curre
 
 ### WANDER TYPE DEMO
 ---
-[] fix apostraphy's not displaying
-[] when you are walking up shift the player left/right to make walking into doors easier
-[] add a note that says the store is closed (late stage RPG economies joke)
 [] fix the little counting girl joke. EVents are not firing correctly?
-[] use non coliding wall sprite at the bottom of the walls. (Add wall paper?)
 
 ### BIBI DUCK DEMO
 ---

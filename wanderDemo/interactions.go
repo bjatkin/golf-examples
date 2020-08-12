@@ -115,6 +115,11 @@ var townSignInter = interaction{
 	lines:    []int{31, 32},
 }
 
+var storeSignInter = interaction{
+	location: vec2{104, 190},
+	lines:    []int{38, 39, 40, 41},
+}
+
 func updateInteraction() {
 	if g.Btnp(golf.ZKey) {
 		if mainInteraction.next() {

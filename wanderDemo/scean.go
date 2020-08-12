@@ -91,6 +91,7 @@ var townScean = scean{
 	mapWH: vec2{52, 37},
 	poi: []interactable{
 		&townSignInter,
+		&storeSignInter,
 		&guard1,
 		&guard2,
 		&fishKid,

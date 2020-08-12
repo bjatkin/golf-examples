@@ -23,42 +23,34 @@ func updatePlayer() {
 	if g.Btnp(golf.TKey) {
 		fmt.Printf("%v\n", playerXY)
 	}
+
+	dx, dy := 0.0, 0.0
 	if g.Btn(golf.UpArrow) {
 		playerFacing = facingUp
-		playerXY.y -= playerSpeed
-		if mapCollide(playerXY) || sceanCollide(playerXY) {
-			playerXY.y += playerSpeed
-		}
+		dy = -playerSpeed
 		playerWalking = true
 		playerOpt.FH = false
 	}
 	if g.Btn(golf.DownArrow) {
 		playerFacing = facingDown
-		playerXY.y += playerSpeed
-		if mapCollide(playerXY) || sceanCollide(playerXY) {
-			playerXY.y -= playerSpeed
-		}
+		dy = playerSpeed
 		playerWalking = true
 		playerOpt.FH = false
 	}
-	if g.Btn(golf.LeftArrow) {
+	if g.Btn(golf.LeftArrow) && dy == 0 {
 		playerFacing = facingLeft
-		playerXY.x -= playerSpeed
-		if mapCollide(playerXY) || sceanCollide(playerXY) {
-			playerXY.x += playerSpeed
-		}
+		dx = -playerSpeed
 		playerWalking = true
 		playerOpt.FH = false
 	}
-	if g.Btn(golf.RightArrow) {
+	if g.Btn(golf.RightArrow) && dy == 0 {
 		playerFacing = facingRight
-		playerXY.x += playerSpeed
-		if mapCollide(playerXY) || sceanCollide(playerXY) {
-			playerXY.x -= playerSpeed
-		}
+		dx = playerSpeed
 		playerWalking = true
 		playerOpt.FH = true
 	}
+
+	movePlayer(dx, dy)
 }
 
 func drawPlayer() {
@@ -75,29 +67,87 @@ func drawPlayer() {
 	g.Spr(index, playerXY.x, playerXY.y, playerOpt)
 }
 
-func mapCollide(p vec2) bool {
+func movePlayer(dx, dy float64) {
+	dest := vec2{playerXY.x + dx, playerXY.y + dy}
+	mapCollide, shiftX, shiftY := mapCollide(dest, playerFacing)
+	sceanCollide := sceanCollide(dest)
+	if !mapCollide && !sceanCollide {
+		playerXY.x += dx
+		playerXY.y += dy
+	}
+	if !sceanCollide && mapCollide && shiftX != 0 {
+		playerXY.x += shiftX
+	}
+	if !sceanCollide && mapCollide && shiftY != 0 {
+		playerXY.y += shiftY
+	}
+}
+
+func mapCollide(p vec2, facing int) (bool, float64, float64) {
 	if p.x < -1 || p.y < -1 || p.x > mainScean.mapWH.x*8-14 || p.y > mainScean.mapWH.y*8-16 {
-		return true
+		return true, 0, 0
 	}
 	// tile offsets
 	x := int(mainScean.mapXY.x)
 	y := int(mainScean.mapXY.y)
 
-	// 4 corners
-	a := g.Fget(g.Mget(int((p.x+2)/8)+x, int((p.y+2)/8))+y, 0)
-	b := g.Fget(g.Mget(int((p.x+14)/8)+x, int((p.y+2)/8))+y, 0)
-	c := g.Fget(g.Mget(int((p.x+2)/8)+x, int((p.y+16)/8))+y, 0)
-	d := g.Fget(g.Mget(int((p.x+14)/8)+x, int((p.y+16)/8))+y, 0)
+	if facing == facingUp {
+		a := g.Fget(g.Mget(int((p.x+2)/8)+x, int((p.y+2)/8))+y, 0)
+		b := g.Fget(g.Mget(int((p.x+8)/8)+x, int((p.y+2)/8))+y, 0)
+		c := g.Fget(g.Mget(int((p.x+14)/8)+x, int((p.y+2)/8))+y, 0)
+		shift := 0.0
+		if !a && c {
+			shift = -1
+		}
+		if !c && a {
+			shift = 1
+		}
+		return (a || b || c), shift, 0
+	}
 
-	// vertical center
-	e := g.Fget(g.Mget(int((p.x+2)/8)+x, int((p.y+8)/8))+y, 0)
-	f := g.Fget(g.Mget(int((p.x+14)/8)+x, int((p.y+8)/8))+y, 0)
+	if facing == facingDown {
+		a := g.Fget(g.Mget(int((p.x+2)/8)+x, int((p.y+16)/8))+y, 0)
+		b := g.Fget(g.Mget(int((p.x+8)/8)+x, int((p.y+16)/8))+y, 0)
+		c := g.Fget(g.Mget(int((p.x+14)/8)+x, int((p.y+16)/8))+y, 0)
+		shift := 0.0
+		if !a && c {
+			shift = -1
+		}
+		if !c && a {
+			shift = 1
+		}
+		return (a || b || c), shift, 0
+	}
 
-	// horizontal center
-	h := g.Fget(g.Mget(int((p.x+8)/8)+x, int((p.y+2)/8))+y, 0)
-	i := g.Fget(g.Mget(int((p.x+8)/8)+x, int((p.y+16)/8))+y, 0)
+	if facing == facingLeft {
+		a := g.Fget(g.Mget(int((p.x+2)/8)+x, int((p.y+2)/8))+y, 0)
+		b := g.Fget(g.Mget(int((p.x+2)/8)+x, int((p.y+8)/8))+y, 0)
+		c := g.Fget(g.Mget(int((p.x+2)/8)+x, int((p.y+16)/8))+y, 0)
+		shift := 0.0
+		if !a && c {
+			shift = -1
+		}
+		if !c && a {
+			shift = 1
+		}
+		return (a || b || c), 0, shift
+	}
 
-	return (a || b || c || d || e || f || h || i)
+	if facing == facingRight {
+		a := g.Fget(g.Mget(int((p.x+14)/8)+x, int((p.y+2)/8))+y, 0)
+		b := g.Fget(g.Mget(int((p.x+14)/8)+x, int((p.y+8)/8))+y, 0)
+		c := g.Fget(g.Mget(int((p.x+14)/8)+x, int((p.y+16)/8))+y, 0)
+		shift := 0.0
+		if !a && c {
+			shift = -1
+		}
+		if !c && a {
+			shift = 1
+		}
+		return (a || b || c), 0, shift
+	}
+
+	return false, 0, 0
 }
 
 func sceanCollide(player vec2) bool {

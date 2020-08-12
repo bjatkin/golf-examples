@@ -44,6 +44,10 @@ var allLines = []string{
 	"Trust Fund Dog: \nand a small loan of a \nmillion dollars from your dad.",
 	"Broke Millennial: \nI managed to scrape together \n18,000 kibble in time to \npay rent.",
 	"Traveler: \nI just feel like Ive been \nrooted to this spot forever \nyou know.",
+	"Theres a sign in the window.",
+	"It says \n\"This shop is out of business \ndue to the owner purchasing",
+	"2,3453 weak lether boots from \nthe last player.\"",
+	"late stage mercantalism \nis the worst x(",
 }
 
 func fillTemplate(in string) string {
