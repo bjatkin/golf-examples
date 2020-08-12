@@ -12,9 +12,6 @@ type convo struct {
 	running    bool
 }
 
-// conversation with joe gopher
-var gopherConvo *convo
-
 // draw the conversation box and the text
 func (c *convo) draw() {
 	g.RectFill(0, float64(c.height), 192, 34, golf.Col7, true)

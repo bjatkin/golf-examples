@@ -20,6 +20,8 @@ type player struct {
 }
 
 const coyoteTimeMax = 30
+const gravity = 0.3
+const friction = 0.85
 
 // Player animation states
 const (
