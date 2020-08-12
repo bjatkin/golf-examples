@@ -5,11 +5,12 @@ This is a small ARPG game where you play a vampire killing monsters and collecti
 of the GOLF engine including things like sprite sheets, map files and drawing text on screen. It also demonstrates common RPG game elements like character movement
 collision detection, simple enemy AI, dialouge boxes and more. the code is currently in development so to see the final version you'll need to check back later.
 
+### TODO
 [] Update the repo readme.
 
 ### WANDER TYPE DEMO
 ---
-[] fix the little counting girl joke. EVents are not firing correctly?
+DONE
 
 ### BIBI DUCK DEMO
 ---
