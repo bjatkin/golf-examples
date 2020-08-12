@@ -23,7 +23,7 @@ func initGame() {
 	player = newEntity(playerControlled,
 		&hpComponent{health: 100},
 		&transformComponent{x: 10, y: 10},
-		&sprComponent{ani: [10]int{2, 3}, aniLen: 2, aniSpeed: 60, opt: golf.SOp{H: 2, TCol: golf.Col7}},
+		&sprComponent{ani: [10]int{2, 3}, aniLen: 2, aniSpeed: 60, opt: golf.SOp{H: 2, TCol: golf.Col2}},
 		&collideComponent{width: 8, height: 16, oldX: 10, oldY: 10},
 	)
 
@@ -198,7 +198,7 @@ func initGame() {
 }
 
 func update() {
-	g.PalA(12)
+	g.PalA(15)
 	g.PalB(1)
 	runUpdateSystems()
 }
