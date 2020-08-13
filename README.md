@@ -6,6 +6,9 @@ of the GOLF engine including things like sprite sheets, map files and drawing te
 collision detection, simple enemy AI, dialouge boxes and more. the code is currently in development so to see the final version you'll need to check back later.
 
 ### TODO
+[] Rewrite golf demos intro
+[] Swap the imports on the demo to use the github version
+[] update the github version of golf (go get -u)
 [] Add a section on running these demos
 [] Add an MIT license to this repo as well
 [] Add some screen shots of the different games to the main read me
@@ -40,7 +43,7 @@ MVP todo  list
 [] use pallet swap from day to night as the start screen
 [] collect red blood as you kill enemies
 [] blood particle system when you kill enemies/ are killed
-[] add in all the enemy types
-[] attack and be attacked
-[] HP bar
+[] attack and kill zombies
+[] use arrow key controlls and z + c
 [] Point counter (Blood Droplets)
+[] clean up the code, especially the init function where I create all the systems. This function should be shortened.
