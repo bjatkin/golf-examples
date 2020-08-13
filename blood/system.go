@@ -5,9 +5,10 @@ const (
 	movePlayer = iota
 	doAI
 	doAttack
-	startCollision
+	addEnemies
+	doIFrames
 	doCollision
-	resolveCollision
+
 	updateSystemLen
 )
 
@@ -15,6 +16,8 @@ const (
 const (
 	drawSprite = iota
 	drawHP
+
+	tmp
 	drawSystemLen
 )
 

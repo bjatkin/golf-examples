@@ -8,12 +8,13 @@ type compType int
 
 // all the transform types
 const (
-	TypeTransformComponent = compType(1)
-	TypeSprComponent       = compType(2)
-	TypeTextComponent      = compType(4)
-	TypeAIComponent        = compType(8)
-	TypeHPComponent        = compType(16)
-	TypeCollideComponent   = compType(32)
+	TypeTransformComponent     = compType(1)
+	TypeSprComponent           = compType(2)
+	TypeTextComponent          = compType(4)
+	TypeAIComponent            = compType(8)
+	TypeHPComponent            = compType(16)
+	TypeCollisionMeshComponent = compType(32)
+	TypeSolidComponent         = compType(64)
 )
 
 type component interface {
@@ -80,30 +81,13 @@ func (c *aiComponent) add() {
 	aiComponents[c.id] = c
 }
 
-var collideComponents = map[int]*collideComponent{}
-
-type collideComponent struct {
-	id             int
-	oldX, oldY     float64
-	deltaX, deltaY float64
-	width, height  float64
-}
-
-func (c *collideComponent) setEnt(ent *entity) {
-	c.id = ent.id
-}
-func (c *collideComponent) ctype() compType {
-	return TypeCollideComponent
-}
-func (c *collideComponent) add() {
-	collideComponents[c.id] = c
-}
-
 var hpComponents = map[int]*hpComponent{}
 
 type hpComponent struct {
-	id     int
-	health int
+	id        int
+	health    int
+	maxHealth int
+	iFrames   int
 }
 
 func (c *hpComponent) setEnt(ent *entity) {
@@ -131,6 +115,41 @@ func (c *textComponent) ctype() compType {
 }
 func (c *textComponent) add() {
 	textComponents[c.id] = c
+}
+
+var collisionMeshComponents = map[int]*collisionMeshComponent{}
+
+type collisionMeshComponent struct {
+	id   int
+	x, y float64
+	w, h float64
+}
+
+func (c *collisionMeshComponent) setEnt(ent *entity) {
+	c.id = ent.id
+}
+func (c *collisionMeshComponent) ctype() compType {
+	return TypeCollisionMeshComponent
+}
+func (c *collisionMeshComponent) add() {
+	collisionMeshComponents[c.id] = c
+}
+
+var solidComponents = map[int]*solidComponent{}
+
+type solidComponent struct {
+	id   int
+	w, h float64
+}
+
+func (c *solidComponent) setEnt(ent *entity) {
+	c.id = ent.id
+}
+func (c *solidComponent) ctype() compType {
+	return TypeSolidComponent
+}
+func (c *solidComponent) add() {
+	solidComponents[c.id] = c
 }
 
 type nilComponent struct{}
