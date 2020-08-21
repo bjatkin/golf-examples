@@ -39,8 +39,8 @@ DONE
 ### BLOOD DEMO
 ---
 MVP todo  list
-[] add collision detection
-[] use pallet swap from day to night as the start screen
+[x] add collision detection
+[x] use pallet swap from day to night as the start screen
 [] collect red blood as you kill enemies
 [] blood particle system when you kill enemies/ are killed
 [] attack and kill zombies

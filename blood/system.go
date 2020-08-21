@@ -17,7 +17,6 @@ const (
 	drawSprite = iota
 	drawHP
 
-	tmp
 	drawSystemLen
 )
 
