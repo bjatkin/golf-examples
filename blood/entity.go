@@ -31,3 +31,10 @@ func newEntity(flags flag, comps ...component) *entity {
 	entityPointer++
 	return ret
 }
+
+func deleteEntity(e *entity) {
+	entityPointer--
+	newID := e.id
+	allEntities[e.id] = allEntities[entityPointer]
+	allEntities[newID].id = newID
+}
