@@ -10,7 +10,6 @@ collision detection, simple enemy AI, dialouge boxes and more. the code is curre
 [] Swap the imports on the demo to use the github version
 [] update the github version of golf (go get -u)
 [] Add a section on running these demos
-[] Add an MIT license to this repo as well
 [] Add some screen shots of the different games to the main read me
 [] Add a link to the golf readme
 [] Add a description to the bibi duck project
@@ -41,9 +40,9 @@ DONE
 MVP todo  list
 [x] add collision detection
 [x] use pallet swap from day to night as the start screen
+[x] blood particle system when you kill enemies/ are killed
+[x] use arrow key controlls and z + c
+[x] Point counter (Blood Droplets)
 [] collect red blood as you kill enemies
-[] blood particle system when you kill enemies/ are killed
 [] attack and kill zombies
-[] use arrow key controlls and z + c
-[] Point counter (Blood Droplets)
 [] clean up the code, especially the init function where I create all the systems. This function should be shortened.
