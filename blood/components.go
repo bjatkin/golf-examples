@@ -19,6 +19,7 @@ const (
 	TypeBloodBankComponent     = compType(256)
 	TypeTravelComponent        = compType(512)
 	TypeTextComponent          = compType(1024)
+	TypeCooldownComponent      = compType(2048)
 )
 
 type component interface {
@@ -222,6 +223,24 @@ func (c *travelComponent) ctype() compType {
 }
 func (c *travelComponent) add() {
 	travelComponents[c.id] = c
+}
+
+var cooldownComponents = map[int]*cooldownComponent{}
+
+type cooldownComponent struct {
+	id                   int
+	cooldown1, cooldown2 int
+	reset1, reset2       int
+}
+
+func (c *cooldownComponent) setEnt(ent *entity) {
+	c.id = ent.id
+}
+func (c *cooldownComponent) ctype() compType {
+	return TypeCooldownComponent
+}
+func (c *cooldownComponent) add() {
+	cooldownComponents[c.id] = c
 }
 
 type nilComponent struct{}

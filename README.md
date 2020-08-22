@@ -38,11 +38,14 @@ DONE
 ### BLOOD DEMO
 ---
 MVP todo  list
-[x] add collision detection
-[x] use pallet swap from day to night as the start screen
-[x] blood particle system when you kill enemies/ are killed
-[x] use arrow key controlls and z + c
-[x] Point counter (Blood Droplets)
-[] collect red blood as you kill enemies
-[] attack and kill zombies
-[] clean up the code, especially the init function where I create all the systems. This function should be shortened.
+[x] spawn projectiles pointing in the direction youre faceing (attack 1)
+[x] spawn diagonal projectiles as well (attack 1)
+[x] spawn a ring of projectiles (attack 2)
+[x] when a projectile hits an enemy, do damage + knockback
+[] when an enemies hp hits zero, kill them and create lots of blood
+[] increase mob cap over time (but set a max so the game dosen't crash)
+[] split the code into more files (e.g. player file, enemy file etc.)
+[] split initalization code into several smaller functions.
+[] make a better UI for the blood bank
+[] remove the coord UI at the top of the screen
+[] update the golf engine import

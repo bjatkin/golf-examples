@@ -3,6 +3,7 @@ package main
 // All the update systems
 const (
 	movePlayer = iota
+	tickCooldown
 	doAI
 	doAttack
 	addEnemies
