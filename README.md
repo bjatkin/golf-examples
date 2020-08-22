@@ -38,14 +38,6 @@ DONE
 ### BLOOD DEMO
 ---
 MVP todo  list
-[x] spawn projectiles pointing in the direction youre faceing (attack 1)
-[x] spawn diagonal projectiles as well (attack 1)
-[x] spawn a ring of projectiles (attack 2)
-[x] when a projectile hits an enemy, do damage + knockback
-[] when an enemies hp hits zero, kill them and create lots of blood
-[] increase mob cap over time (but set a max so the game dosen't crash)
-[] split the code into more files (e.g. player file, enemy file etc.)
-[] split initalization code into several smaller functions.
-[] make a better UI for the blood bank
-[] remove the coord UI at the top of the screen
+[] make a better UI for the HUD
+[] add a death screen
 [] update the golf engine import
