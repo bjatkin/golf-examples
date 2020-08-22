@@ -9,6 +9,8 @@ const (
 	doIFrames
 	doCollision
 	doParticles
+	doProjectile
+	doSprAni
 
 	updateSystemLen
 )

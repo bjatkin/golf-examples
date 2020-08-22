@@ -10,13 +10,15 @@ type compType int
 const (
 	TypeTransformComponent     = compType(1)
 	TypeSprComponent           = compType(2)
-	TypeTextComponent          = compType(4)
+	TypeAniComponent           = compType(4)
 	TypeAIComponent            = compType(8)
 	TypeHPComponent            = compType(16)
 	TypeCollisionMeshComponent = compType(32)
 	TypeSolidComponent         = compType(64)
 	TypeParticleComponent      = compType(128)
 	TypeBloodBankComponent     = compType(256)
+	TypeTravelComponent        = compType(512)
+	TypeTextComponent          = compType(1024)
 )
 
 type component interface {
@@ -42,16 +44,32 @@ func (c *transformComponent) add() {
 	transformComponents[c.id] = c
 }
 
-var sprComponents = map[int]*sprComponent{}
+var aniComponents = map[int]*aniComponent{}
 
-type sprComponent struct {
+type aniComponent struct {
 	id       int
 	ani      [10]int
 	aniLen   int
-	aniSpeed int
-	opt      golf.SOp
-	aniFrame int
-	frame    int
+	aniSpeed float64
+	aniFrame float64
+}
+
+func (c *aniComponent) setEnt(ent *entity) {
+	c.id = ent.id
+}
+func (c *aniComponent) ctype() compType {
+	return TypeAniComponent
+}
+func (c *aniComponent) add() {
+	aniComponents[c.id] = c
+}
+
+var sprComponents = map[int]*sprComponent{}
+
+type sprComponent struct {
+	id  int
+	n   int
+	opt golf.SOp
 }
 
 func (c *sprComponent) setEnt(ent *entity) {
@@ -187,6 +205,23 @@ func (c *bloodBankComponent) ctype() compType {
 }
 func (c *bloodBankComponent) add() {
 	bloodBankComponents[c.id] = c
+}
+
+var travelComponents = map[int]*travelComponent{}
+
+type travelComponent struct {
+	id     int
+	dx, dy float64
+}
+
+func (c *travelComponent) setEnt(ent *entity) {
+	c.id = ent.id
+}
+func (c *travelComponent) ctype() compType {
+	return TypeTravelComponent
+}
+func (c *travelComponent) add() {
+	travelComponents[c.id] = c
 }
 
 type nilComponent struct{}
