@@ -12,6 +12,7 @@ const (
 	doParticles
 	doProjectile
 	doSprAni
+	doEnemyDeath
 
 	updateSystemLen
 )
@@ -20,7 +21,8 @@ const (
 const (
 	drawParticles = iota
 	drawSprite
-	drawHP
+	drawMiniHP
+	drawHUD
 
 	drawSystemLen
 )

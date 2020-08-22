@@ -2,7 +2,7 @@ package main
 
 import (
 	"fantasyConsole/golf"
-	"math/rand"
+	"fmt"
 )
 
 func initPlayer() {
@@ -15,6 +15,11 @@ func initPlayer() {
 		&solidComponent{w: 8, h: 16},
 		&bloodBankComponent{balance: 0},
 	)
+
+	// Do Iframes
+	allUpdateSystems[doIFrames] = toSystem(none, TypeHPComponent, func(e *entity) {
+		hpComponents[e.id].iFrames--
+	})
 
 	// Player Movement
 	allUpdateSystems[movePlayer] = toSystem(
@@ -33,23 +38,24 @@ func initPlayer() {
 			solid.w = 8
 			attack := playerAttack(e, ani, spr, tran, solid)
 			playerMove(e, ani, spr, tran, solid, attack)
-
-			// TEST CODE
-			if g.Btn(golf.PKey) {
-				pXY := transformComponents[player.id]
-				for i := 0; i < 4; i++ {
-					addBloodParticle(
-						bloodParticles,
-						rand.Float64()*16+(pXY.x-32),
-						rand.Float64()*8+(pXY.y+12),
-						rand.Float64()-0.5,
-						rand.Float64()*5,
-						float64(rand.Intn(10)+4),
-					)
-				}
-			}
-			// TEST CODE
 		})
+
+	// Draw Player hud element
+	allDrawSystems[drawHUD] = toSystem(playerControlled, TypeHPComponent|TypeBloodBankComponent, func(e *entity) {
+		hp := hpComponents[e.id]
+		pBank := bloodBankComponents[e.id]
+
+		if hp.health < 0 {
+			g.TextL("You died!", whiteTxt)
+			return
+		}
+		g.RectFill(0, 0, 192, 8, golf.Col0, true)
+		g.TextL("HP:", whiteTxt)
+		maxLen := 50.0
+		g.RectFill(20, 1, (float64(hp.health)/float64(hp.maxHealth))*maxLen, 6, golf.Col1, true)
+
+		g.TextL(fmt.Sprintf("\n%d", pBank.balance), whiteTxt)
+	})
 }
 
 func playerAttack(e *entity, ani *aniComponent, spr *sprComponent, tran *transformComponent, solid *solidComponent) bool {

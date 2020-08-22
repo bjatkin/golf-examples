@@ -2,7 +2,6 @@ package main
 
 import (
 	"fantasyConsole/golf"
-	"fmt"
 	"math"
 )
 
@@ -20,7 +19,6 @@ func main() {
 
 var player *entity
 var debug string
-var totalEnemyCount int
 
 func initGame() {
 	initPlayer()
@@ -47,11 +45,6 @@ func initGame() {
 	newEntity(none,
 		&collisionMeshComponent{0, 115, 335, 50, 65},
 	)
-
-	// Do Iframes
-	allUpdateSystems[doIFrames] = toSystem(none, TypeHPComponent, func(e *entity) {
-		hpComponents[e.id].iFrames--
-	})
 
 	// Resolve collisons with collision meshes
 	allUpdateSystems[doCollision] = toSystem(none, TypeTransformComponent|TypeSolidComponent, func(e *entity) {
@@ -116,24 +109,6 @@ func initGame() {
 		g.Spr(spr.n, tran.x, tran.y, spr.opt)
 	})
 
-	// Draw HP hud element
-	allDrawSystems[drawHP] = toSystem(playerControlled, TypeHPComponent|TypeTransformComponent|TypeBloodBankComponent, func(e *entity) {
-		hp := hpComponents[e.id]
-		pBank := bloodBankComponents[e.id]
-
-		if hp.health < 0 {
-			g.TextL("You died!", whiteTxt)
-			return
-		}
-		g.RectFill(0, 0, 192, 8, golf.Col0, true)
-		g.TextL("HP:", whiteTxt)
-		maxLen := 50.0
-		g.RectFill(20, 1, (float64(hp.health)/float64(hp.maxHealth))*maxLen, 6, golf.Col1, true)
-
-		pos := transformComponents[e.id]
-		g.TextR(fmt.Sprintf("X: %.0f, Y: %.0f", pos.x, pos.y), whiteTxt)
-		g.TextL(fmt.Sprintf("\n%d", pBank.balance), whiteTxt)
-	})
 }
 
 func update() {

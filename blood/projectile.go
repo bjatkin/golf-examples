@@ -23,13 +23,20 @@ func initProjectileSystem() {
 				z := getEntity(zomb.id)
 				zt := transformComponents[z.id]
 				hp := hpComponents[z.id]
-				dx, dy := zt.x-t.x, zt.y-t.y
-				if math.Abs(dx) < 5 && math.Abs(dy) < 16 {
+				dx, dy := (zt.x+4)-t.x, (zt.y+8)-t.y
+				if math.Abs(dx) < 4 && math.Abs(dy) < 8 {
 					hp.health--
-					if math.Abs(dx) > math.Abs(dy) {
-						zt.x += dx
-					} else {
-						zt.y += dy
+					if dx > 0 {
+						zt.x += 2
+					}
+					if dy > 0 {
+						zt.y += 2
+					}
+					if dx < 0 {
+						zt.x -= 2
+					}
+					if dy < 0 {
+						zt.y -= 2
 					}
 					deleteEntity(e)
 					return
