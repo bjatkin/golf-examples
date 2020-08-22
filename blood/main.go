@@ -31,6 +31,7 @@ func initGame() {
 		&transformComponent{x: 192, y: 480},
 		&sprComponent{ani: [10]int{2, 3}, aniLen: 2, aniSpeed: 60, opt: golf.SOp{H: 2, TCol: golf.Col2}},
 		&solidComponent{w: 8, h: 16},
+		&bloodBankComponent{balance: 0},
 	)
 
 	// Collision walls
@@ -59,13 +60,53 @@ func initGame() {
 		tran := transformComponents[e.id]
 		solid := solidComponents[e.id]
 		speed := 1.5
+		attack1 := false
+		attack2 := false
 
 		spr.ani = [10]int{2, 3}
 		spr.aniLen = 2
 		spr.aniSpeed = 60
 		spr.opt.W = 1
 		solid.w = 8
-		if g.Btn(golf.WKey) {
+		if g.Btn(golf.ZKey) {
+			spr.ani = [10]int{4}
+			spr.aniLen = 1
+			spr.opt.W = 2
+			solid.w = 16
+			attack1 = true
+		}
+		if g.Btn(golf.XKey) {
+			if g.Btn(golf.LeftArrow) {
+				spr.ani = [10]int{76}
+				spr.aniLen = 1
+				spr.opt.W = 2
+				solid.w = 16
+				spr.opt.FH = false
+			}
+			if g.Btn(golf.RightArrow) {
+				spr.ani = [10]int{76}
+				spr.aniLen = 1
+				spr.opt.W = 2
+				solid.w = 16
+				spr.opt.FH = true
+			}
+			if g.Btn(golf.UpArrow) {
+				spr.ani = [10]int{78}
+				spr.aniLen = 1
+				spr.opt.W = 2
+				solid.w = 16
+				spr.opt.FH = false
+			}
+			if g.Btn(golf.DownArrow) {
+				spr.ani = [10]int{78}
+				spr.aniLen = 1
+				spr.opt.W = 2
+				solid.w = 16
+				spr.opt.FH = false
+			}
+			attack2 = true
+		}
+		if g.Btn(golf.UpArrow) && !attack1 && !attack2 {
 			tran.y -= speed
 			spr.ani = [10]int{14, 16, 18, 20, -14, -16, -18, -20}
 			spr.aniLen = 8
@@ -73,7 +114,7 @@ func initGame() {
 			spr.opt.W = 2
 			solid.w = 16
 		}
-		if g.Btn(golf.SKey) {
+		if g.Btn(golf.DownArrow) && !attack1 && !attack2 {
 			tran.y += speed
 			spr.ani = [10]int{14, 16, 18, 20, -14, -16, -18, -20}
 			spr.aniLen = 8
@@ -81,7 +122,7 @@ func initGame() {
 			spr.opt.W = 2
 			solid.w = 16
 		}
-		if g.Btn(golf.AKey) {
+		if g.Btn(golf.LeftArrow) && !attack1 && !attack2 {
 			tran.x -= speed
 			spr.ani = [10]int{6, 8, 10, 12}
 			spr.aniLen = 4
@@ -90,7 +131,7 @@ func initGame() {
 			spr.opt.W = 2
 			solid.w = 16
 		}
-		if g.Btn(golf.DKey) {
+		if g.Btn(golf.RightArrow) && !attack1 && !attack2 {
 			tran.x += speed
 			spr.ani = [10]int{6, 8, 10, 12}
 			spr.aniLen = 4
@@ -104,7 +145,7 @@ func initGame() {
 			for i := 0; i < 4; i++ {
 				addBloodParticle(
 					bloodParticles,
-					rand.Float64()*16+(pXY.x-4),
+					rand.Float64()*16+(pXY.x-32),
 					rand.Float64()*8+(pXY.y+12),
 					rand.Float64()-0.5,
 					rand.Float64()*5,
@@ -265,8 +306,9 @@ func initGame() {
 	})
 
 	// Draw HP hud element
-	allDrawSystems[drawHP] = toSystem(playerControlled, TypeHPComponent|TypeTransformComponent, func(e *entity) {
+	allDrawSystems[drawHP] = toSystem(playerControlled, TypeHPComponent|TypeTransformComponent|TypeBloodBankComponent, func(e *entity) {
 		hp := hpComponents[e.id]
+		pBank := bloodBankComponents[e.id]
 
 		if hp.health < 0 {
 			g.TextL("You died!", whiteTxt)
@@ -279,6 +321,7 @@ func initGame() {
 
 		pos := transformComponents[e.id]
 		g.TextR(fmt.Sprintf("X: %.0f, Y: %.0f", pos.x, pos.y), whiteTxt)
+		g.TextL(fmt.Sprintf("\n\n%d", pBank.balance), whiteTxt)
 	})
 }
 

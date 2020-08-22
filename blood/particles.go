@@ -2,6 +2,7 @@ package main
 
 import (
 	"fantasyConsole/golf"
+	"math"
 )
 
 type blood struct {
@@ -45,16 +46,27 @@ func initParticleSystem() {
 
 	allUpdateSystems[doParticles] = toSystem(none, TypeParticleComponent, func(e *entity) {
 		pList := particleComponents[e.id]
+		pXY := transformComponents[player.id]
+		pBank := bloodBankComponents[player.id]
 		for _, p := range pList.particles {
 			if !p.live {
 				continue
 			}
+			dx, dy := math.Abs((pXY.x+4)-p.x), math.Abs((pXY.y+16)-p.y)
+			if dx < 15 && dy < 15 && !p.collected {
+				p.collected = true
+				pBank.balance++
+			}
 			p.height += p.dy
 			p.dy -= 0.2
+			if p.collected {
+				p.dy += 0.4
+			}
 			if p.height > 0 && p.height < 192 {
 				p.x += p.dx
 			}
 			if p.height < 0 {
+				p.dy = 0
 				p.height = 0
 			}
 			if p.height > 192 {

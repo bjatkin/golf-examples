@@ -21,7 +21,7 @@ var fadeArray = [][]golf.Col{
 func menuUpdate() {
 	g.PalA(15)
 	g.PalB(0)
-	if g.Btnp(golf.AKey) {
+	if g.Btnp(golf.ZKey) {
 		move = true
 	}
 	if move {
@@ -45,5 +45,5 @@ func menuDraw() {
 	g.Camera(100, cy)
 
 	g.RectFill(120, 290, 160, 14, golf.Col0)
-	g.Text(130, 295, "press the A key to start", whiteTxt)
+	g.Text(130, 295, "press the z key to start", whiteTxt)
 }
