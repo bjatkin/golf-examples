@@ -8,13 +8,15 @@ const (
 	addEnemies
 	doIFrames
 	doCollision
+	doParticles
 
 	updateSystemLen
 )
 
 // All the draw systems
 const (
-	drawSprite = iota
+	drawParticles = iota
+	drawSprite
 	drawHP
 
 	drawSystemLen

@@ -24,6 +24,8 @@ var debug string
 var totalEnemyCount int
 
 func initGame() {
+	initParticleSystem()
+
 	player = newEntity(playerControlled,
 		&hpComponent{health: 100, maxHealth: 100},
 		&transformComponent{x: 192, y: 480},
@@ -96,6 +98,19 @@ func initGame() {
 			spr.opt.FH = true
 			spr.opt.W = 2
 			solid.w = 16
+		}
+		if g.Btn(golf.PKey) {
+			pXY := transformComponents[player.id]
+			for i := 0; i < 4; i++ {
+				addBloodParticle(
+					bloodParticles,
+					rand.Float64()*16+(pXY.x-4),
+					rand.Float64()*8+(pXY.y+12),
+					rand.Float64()-0.5,
+					rand.Float64()*5,
+					float64(rand.Intn(10)+4),
+				)
+			}
 		}
 	})
 
@@ -272,13 +287,15 @@ func update() {
 }
 
 var whiteTxt = golf.TOp{Col: golf.Col3}
+var cameraX, cameraY = 0, 0
 
 func draw() {
 	g.Cls(golf.Col0)
 	g.Map(40, 20, 40, 70, 0, 0)
 
 	pos := transformComponents[player.id]
-	g.Camera(int(pos.x)-92, int(pos.y)-88)
+	cameraX, cameraY = int(pos.x)-92, int(pos.y)-88
+	g.Camera(cameraX, cameraY)
 
 	runDrawSystems()
 

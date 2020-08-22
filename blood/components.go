@@ -15,6 +15,7 @@ const (
 	TypeHPComponent            = compType(16)
 	TypeCollisionMeshComponent = compType(32)
 	TypeSolidComponent         = compType(64)
+	TypeParticleComponent      = compType(128)
 )
 
 type component interface {
@@ -150,6 +151,24 @@ func (c *solidComponent) ctype() compType {
 }
 func (c *solidComponent) add() {
 	solidComponents[c.id] = c
+}
+
+var particleComponents = map[int]*particleComponent{}
+
+type particleComponent struct {
+	id        int
+	particles [2000]*blood
+	pid       int
+}
+
+func (c *particleComponent) setEnt(ent *entity) {
+	c.id = ent.id
+}
+func (c *particleComponent) ctype() compType {
+	return TypeParticleComponent
+}
+func (c *particleComponent) add() {
+	particleComponents[c.id] = c
 }
 
 type nilComponent struct{}
