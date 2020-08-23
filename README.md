@@ -21,7 +21,6 @@ collision detection, simple enemy AI, dialouge boxes and more. the code is curre
 [] Add a description to the blood project
 [] Add a features list to the blood project
 [] Add some screen shots of the wander project
-[] Finish the blood demo
 
 ### WANDER DEMO
 ---
@@ -38,6 +37,4 @@ DONE
 ### BLOOD DEMO
 ---
 MVP todo  list
-[] make a better UI for the HUD
-[] add a death screen
 [] update the golf engine import
