@@ -67,10 +67,10 @@ collectibles to gather and an NPC to interact with.
 
 # Blood Demo
 
-![Blood Screeshot 1](https://github.com/bjatkin/golf-examples/blob/master/images/blood1.png)
-![Blood Screeshot 2](https://github.com/bjatkin/golf-examples/blob/master/images/blood2.png)
-![Blood Screeshot 3](https://github.com/bjatkin/golf-examples/blob/master/images/blood3.png)
-![Blood Screeshot 4](https://github.com/bjatkin/golf-examples/blob/master/images/blood4.png)
+<img src="https://github.com/bjatkin/golf-examples/blob/master/images/blood1.png" alt="Blood Screenshot 1" width="350" >
+<img src="https://github.com/bjatkin/golf-examples/blob/master/images/blood2.png" alt="Blood Screenshot 2" width="350" >
+<img src="https://github.com/bjatkin/golf-examples/blob/master/images/blood3.png" alt="Blood Screenshot 3" width="350" >
+<img src="https://github.com/bjatkin/golf-examples/blob/master/images/blood4.png" alt="Blood Screenshot 4" width="350" >
 
 This game is a small demo of an ARPG game. It is inspired
 visually by the diablo series and plays similarly to
@@ -97,10 +97,10 @@ gauge.
 
 # Wander Demo
 
-![Wander Screeshot 1](https://github.com/bjatkin/golf-examples/blob/master/images/wander1.png)
-![Wander Screeshot 2](https://github.com/bjatkin/golf-examples/blob/master/images/wander2.png)
-![Wander Screeshot 3](https://github.com/bjatkin/golf-examples/blob/master/images/wander3.png)
-![Wander Screeshot 4](https://github.com/bjatkin/golf-examples/blob/master/images/wander4.png)
+<img src="https://github.com/bjatkin/golf-examples/blob/master/images/wander1.png" alt="Wander Screenshot 1" width="350" >
+<img src="https://github.com/bjatkin/golf-examples/blob/master/images/wander2.png" alt="Wander Screenshot 2" width="350" >
+<img src="https://github.com/bjatkin/golf-examples/blob/master/images/wander3.png" alt="Wander Screenshot 3" width="350" >
+<img src="https://github.com/bjatkin/golf-examples/blob/master/images/wander4.png" alt="Wander Screenshot 4" width="350" >
 
 This is a small game that plays somewhat like a Pokemon
 game. You can move around and interact with various people and objects. You can also go into houses and 
