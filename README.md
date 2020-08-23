@@ -17,9 +17,7 @@ start a simple web server. Simply run play [demo name] and a localhost server wi
 You're defalut browser will also be opened to http://localhost:8080 where you will be able to play the demo.
 
 # One Page API Demo
-<img src="https://github.com/bjatkin/golf-examples/blob/master/images/APIDemo.png" alt="Demo Screen Shot" style="width: 350px; display: inline-block" >
-<img src="https://github.com/bjatkin/golf-examples/blob/master/images/APIDemo.png" alt="Demo Screen Shot" style="width: 350px; display: inline-block" ><br>
-<!-- ![Demo Screen Shot](https://github.com/bjatkin/golf-examples/blob/master/images/APIDemo.png) -->
+<img src="https://github.com/bjatkin/golf-examples/blob/master/images/APIDemo.png" alt="Demo Screenshot" width="350" >
 
 This is a simple demo of several of the most important GoLF API calls. It demonstrates drawing a tile man, drawing, scaling and flipping sprites, and moving the camera. This demo also enables the mouse. you can change
 the screen pallet by clicking the up and down buttons
@@ -45,10 +43,11 @@ with the Z key. Also, be careful, Slimy is watching you.
 
 # BiBiDuck Demo
 
-![BiBiDuck Screeshot 1](https://github.com/bjatkin/golf-examples/blob/master/images/bibiDuck1.png)
-![BiBiDuck Screeshot 2](https://github.com/bjatkin/golf-examples/blob/master/images/bibiDuck2.png)
-![BiBiDuck Screeshot 3](https://github.com/bjatkin/golf-examples/blob/master/images/bibiDuck3.png)
-![BiBiDuck Screeshot 4](https://github.com/bjatkin/golf-examples/blob/master/images/bibiDuck4.png)
+
+<img src="https://github.com/bjatkin/golf-examples/blob/master/images/bibiDuck1.png" alt="BiBiDuck Screenshot 1" width="350" >
+<img src="https://github.com/bjatkin/golf-examples/blob/master/images/bibiDuck2.png" alt="BiBiDuck Screenshot 2" width="350" >
+<img src="https://github.com/bjatkin/golf-examples/blob/master/images/bibiDuck3.png" alt="BiBiDuck Screenshot 3" width="350" >
+<img src="https://github.com/bjatkin/golf-examples/blob/master/images/bibiDuck4.png" alt="BiBiDuck Screenshot 4" width="350" >
 
 This is a basic platformer game that plays similarly to 
 2D mario and other platforming games. It has multiple
