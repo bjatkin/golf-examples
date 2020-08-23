@@ -2,7 +2,6 @@ package main
 
 import (
 	"fantasyConsole/golf"
-	"fmt"
 )
 
 func initPlayer() {
@@ -41,20 +40,42 @@ func initPlayer() {
 		})
 
 	// Draw Player hud element
-	allDrawSystems[drawHUD] = toSystem(playerControlled, TypeHPComponent|TypeBloodBankComponent, func(e *entity) {
+	allDrawSystems[drawHUD] = toSystem(playerControlled, TypeHPComponent|TypeBloodBankComponent|TypeCooldownComponent, func(e *entity) {
 		hp := hpComponents[e.id]
 		pBank := bloodBankComponents[e.id]
+		cool := cooldownComponents[e.id]
 
 		if hp.health < 0 {
-			g.TextL("You died!", whiteTxt)
+			g.Update = deathScreenUpdate
+			g.Draw = deathScreenDraw
 			return
 		}
-		g.RectFill(0, 0, 192, 8, golf.Col0, true)
-		g.TextL("HP:", whiteTxt)
-		maxLen := 50.0
-		g.RectFill(20, 1, (float64(hp.health)/float64(hp.maxHealth))*maxLen, 6, golf.Col1, true)
 
-		g.TextL(fmt.Sprintf("\n%d", pBank.balance), whiteTxt)
+		if pBank.balance > 1000 {
+			g.Update = winScreenUpdate
+			g.Draw = winScreenDraw
+			return
+		}
+
+		// Draw the HP
+		g.RectFill(0, 160, 40, 32, golf.Col0, true) // BG
+		hpPercent := 1 - (float64(hp.health) / float64(hp.maxHealth))
+		g.RectFill(0, 160+(32*hpPercent), 40, 32, golf.Col1, true) // HP level
+		g.Spr(384, 0, 160, golf.SOp{TCol: golf.Col2, W: 5, H: 4, Fixed: true})
+
+		// Draw the blood bank
+		g.RectFill(151, 160, 40, 32, golf.Col0, true) // BG
+		bloodPercent := 1 - (float64(pBank.balance) / 1000.0)
+		g.RectFill(152, 160+(32*bloodPercent), 40, 32, golf.Col2, true) // blood bank level
+		g.Spr(384, 151, 160, golf.SOp{TCol: golf.Col2, W: 5, H: 4, Fixed: true, FH: true})
+
+		// Cool Down Rect
+		attack1Percent := 1 - (float64(cool.cooldown1) / float64(cool.reset1))
+		attack2Percent := 1 - (float64(cool.cooldown2) / float64(cool.reset2))
+		g.RectFill(70, 168, 56, 24, golf.Col0, true)                     // BG
+		g.RectFill(76, 168, 18-(18*attack1Percent), 24, golf.Col2, true) // attack 1
+		g.RectFill(98, 168, 18-(18*attack2Percent), 24, golf.Col2, true) // attack 2
+		g.Spr(422, 70, 168, golf.SOp{TCol: golf.Col2, W: 7, H: 3, Fixed: true})
 	})
 }
 

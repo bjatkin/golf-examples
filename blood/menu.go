@@ -5,7 +5,7 @@ import "fantasyConsole/golf"
 var menuY, yTarget = 177.0, 377.0
 var beta, tSpeed = 0.0, 0.01
 var move = false
-var fadeArray = [][]golf.Col{
+var menuFadeArray = [][]golf.Col{
 	[]golf.Col{golf.Col3, golf.Col0},
 	[]golf.Col{golf.Col7, golf.Col0},
 	[]golf.Col{golf.Col6, golf.Col0},
@@ -28,8 +28,8 @@ func menuUpdate() {
 		beta += tSpeed
 	}
 	if beta > 1.1 {
-		g.Update = update
-		g.Draw = draw
+		g.Update = gameUpdate
+		g.Draw = gameDraw
 	}
 }
 
@@ -39,11 +39,13 @@ func menuDraw() {
 	g.Map(40, 20, 40, 70, 0, 0,
 		golf.SOp{
 			PFrom: []golf.Col{golf.Col0, golf.Col3},
-			PTo:   fadeArray[fIndex]})
+			PTo:   menuFadeArray[fIndex]})
 
 	cy := int(lerp(menuY, yTarget, beta))
 	g.Camera(100, cy)
 
-	g.RectFill(120, 290, 160, 14, golf.Col0)
-	g.Text(130, 295, "press the z key to start", whiteTxt)
+	if !move {
+		g.RectFill(120, 290, 160, 14, golf.Col0)
+		g.Text(130, 295, "press the z key to start", whiteTxt)
+	}
 }

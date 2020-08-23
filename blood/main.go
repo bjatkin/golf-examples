@@ -111,14 +111,14 @@ func initGame() {
 
 }
 
-func update() {
+func gameUpdate() {
 	runUpdateSystems()
 }
 
 var whiteTxt = golf.TOp{Col: golf.Col3}
 var cameraX, cameraY = 0, 0
 
-func draw() {
+func gameDraw() {
 	g.Cls(golf.Col0)
 	g.Map(40, 20, 40, 70, 0, 0)
 
