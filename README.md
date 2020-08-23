@@ -17,7 +17,7 @@ start a simple web server. Simply run play [demo name] and a localhost server wi
 You're defalut browser will also be opened to http://localhost:8080 where you will be able to play the demo.
 
 # One Page API Demo
-<img src="https://github.com/bjatkin/golf-examples/blob/master/images/APIDemo.png" alt="Demo Screen Shot" align="left" width="400" ><br>
+<img src="https://github.com/bjatkin/golf-examples/blob/master/images/APIDemo.png" alt="Demo Screen Shot" width="400" ><br>
 <!-- ![Demo Screen Shot](https://github.com/bjatkin/golf-examples/blob/master/images/APIDemo.png) -->
 
 This is a simple demo of several of the most important GoLF API calls. It demonstrates drawing a tile man, drawing, scaling and flipping sprites, and moving the camera. This demo also enables the mouse. you can change
