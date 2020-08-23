@@ -1,6 +1,6 @@
 package main
 
-import "fantasyConsole/golf"
+import "github.com/bjatkin/golf-engine/golf"
 
 // conversation with joe gopher
 var gopherConvo *convo

@@ -1,8 +1,6 @@
 package main
 
-import (
-	"fantasyConsole/golf"
-)
+import "github.com/bjatkin/golf-engine/golf"
 
 type drawable interface {
 	draw(float64, float64)

@@ -1,6 +1,6 @@
 package main
 
-import "fantasyConsole/golf"
+import "github.com/bjatkin/golf-engine/golf"
 
 var menuY, yTarget = 177.0, 377.0
 var beta, tSpeed = 0.0, 0.01

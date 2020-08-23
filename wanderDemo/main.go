@@ -1,7 +1,7 @@
 package main
 
 import (
-	"fantasyConsole/golf"
+	"github.com/bjatkin/golf-engine/golf"
 )
 
 var g *golf.Engine

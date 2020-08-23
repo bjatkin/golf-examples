@@ -1,8 +1,9 @@
 package main
 
 import (
-	"fantasyConsole/golf"
 	"fmt"
+
+	"github.com/bjatkin/golf-engine/golf"
 )
 
 var playerXY = vec2{200, 132}

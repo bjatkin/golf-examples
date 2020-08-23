@@ -1,8 +1,9 @@
 package main
 
 import (
-	"fantasyConsole/golf"
 	"math"
+
+	"github.com/bjatkin/golf-engine/golf"
 )
 
 type blood struct {

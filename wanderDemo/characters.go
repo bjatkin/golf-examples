@@ -1,8 +1,6 @@
 package main
 
-import (
-	"fantasyConsole/golf"
-)
+import "github.com/bjatkin/golf-engine/golf"
 
 type collidable interface {
 	collide(vec2) bool

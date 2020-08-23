@@ -1,6 +1,6 @@
 package main
 
-import "fantasyConsole/golf"
+import "github.com/bjatkin/golf-engine/golf"
 
 // convo is an interaction between the player and another character
 type convo struct {

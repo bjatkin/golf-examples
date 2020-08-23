@@ -1,8 +1,9 @@
 package main
 
 import (
-	"fantasyConsole/golf"
 	"math/rand"
+
+	"github.com/bjatkin/golf-engine/golf"
 )
 
 type particle struct {

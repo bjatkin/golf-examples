@@ -1,8 +1,6 @@
 package main
 
-import (
-	"fantasyConsole/golf"
-)
+import "github.com/bjatkin/golf-engine/golf"
 
 func initPlayer() {
 	player = newEntity(playerControlled,

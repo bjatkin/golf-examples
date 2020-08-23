@@ -1,9 +1,10 @@
 package main
 
 import (
-	"fantasyConsole/golf"
 	"math"
 	"strconv"
+
+	"github.com/bjatkin/golf-engine/golf"
 )
 
 var nearGopher bool
