@@ -83,7 +83,7 @@ func initEnemies() {
 
 	// Add Enemies
 	allUpdateSystems[addEnemies] = toSystem(playerControlled, TypeTransformComponent, func(e *entity) {
-		if g.Frames()%12000 == 0 && maxEnemyCount < 500 {
+		if g.Frames()%12000 == 0 && maxEnemyCount < 100 {
 			maxEnemyCount++
 		}
 		if totalEnemyCount > maxEnemyCount {
@@ -126,6 +126,7 @@ func initEnemies() {
 				allEnemies[i] = allEnemies[len(allEnemies)-1]
 				allEnemies = allEnemies[:len(allEnemies)-1]
 				deleteEntity(e)
+				totalEnemyCount--
 				return
 			}
 		}
